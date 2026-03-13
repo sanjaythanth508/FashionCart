@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | FashionCart - Premium Fashion Store</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #000000;
+            --secondary: #ff6b8b;
+            --accent: #8a2be2;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --dark-gray: #343a40;
+            --border: #e9ecef;
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-gray);
+            background: #fff;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+
+        /* Navigation - same as shop */
+        .navbar {
+            background: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(10px);
+            padding: 22px 0;
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--primary) !important;
+            position: relative;
+        }
+
+        .navbar-brand:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--secondary);
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover:after {
+            width: 100%;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark-gray) !important;
+            margin: 0 8px;
+            padding: 10px 20px !important;
+            border-radius: 50px;
+            transition: var(--transition);
+            position: relative;
+            font-size: 15px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--secondary) !important;
+            background: rgba(255, 107, 139, 0.05);
+        }
+
+        .nav-link.active {
+            background: rgba(255, 107, 139, 0.1);
+        }
+
+        .nav-link:before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover:before,
+        .nav-link.active:before {
+            width: 30px;
+        }
+
+        /* Header */
+        .checkout-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 120px 0 80px;
+            margin-top: 76px;
+            text-align: center;
+        }
+
+        .checkout-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 0;
+            justify-content: center;
+        }
+
+        .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--secondary);
+        }
+
+        /* Checkout Progress */
+        .checkout-progress {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 40px 0 60px;
+            flex-wrap: wrap;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding: 0 30px;
+        }
+
+        .progress-step .step-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--gray);
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+
+        .progress-step.active .step-number {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+
+        .progress-step.completed .step-number {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+
+        .progress-step .step-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        .progress-step.active .step-label {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .progress-step.completed .step-label {
+            color: var(--dark-gray);
+        }
+
+        .progress-step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: 25px;
+            width: 30px;
+            height: 2px;
+            background: var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .progress-step {
+                padding: 0 15px;
+            }
+
+            .progress-step:not(:last-child):after {
+                width: 15px;
+                right: -10px;
+            }
+        }
+
+        /* Main Content */
+        .checkout-container {
+            padding: 40px 0 80px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--secondary);
+        }
+
+        /* Form Styles */
+        .form-control,
+        .form-select {
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 139, 0.1);
+            outline: none;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark-gray);
+            margin-bottom: 8px;
+        }
+
+        /* Payment Methods */
+        .payment-method {
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .payment-method:hover {
+            border-color: var(--secondary);
+        }
+
+        .payment-method.selected {
+            border-color: var(--secondary);
+            background: rgba(255, 107, 139, 0.05);
+        }
+
+        .payment-method .form-check-input {
+            margin-right: 10px;
+        }
+
+        .payment-method .form-check-input:checked {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 30px;
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-item .item-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .summary-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .summary-item .item-details h5 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .summary-item .item-details p {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin: 0;
+        }
+
+        .summary-totals {
+            margin-top: 25px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 1rem;
+        }
+
+        .total-row.grand-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            border-top: 2px solid var(--border);
+            margin-top: 15px;
+            padding-top: 20px;
+        }
+
+        .btn-checkout {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            width: 100%;
+            margin-top: 30px;
+            transition: var(--transition);
+        }
+
+        .btn-checkout:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            color: white;
+        }
+
+        .btn-checkout:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+        }
+
+        /* Cart Empty State */
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .empty-cart i {
+            font-size: 4rem;
+            color: var(--border);
+            margin-bottom: 20px;
+        }
+
+        .empty-cart h3 {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        .empty-cart .btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 60px 0 20px;
+            margin-top: 80px;
+        }
+
+        .footer-links h5 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Wishlist Button Styles */
+        .action-btn.wishlisted {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .action-btn.wishlisted:hover {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+
+        /* Wishlist icon animation */
+        @keyframes heartBeat {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .wishlist-btn.wishlisted i {
+            animation: heartBeat 0.3s ease;
+        }
+
+        /* Cart Button Styles */
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .add-to-cart:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .add-to-cart.added {
+            background: var(--secondary);
+        }
+
+        /* Cart Controls Styling */
+        .cart-quantity-controls {
+            background: white;
+            padding: 2px;
+            border-radius: 8px;
+        }
+
+        .cart-quantity-controls .btn-outline-secondary {
+            border-color: #dee2e6;
+            color: #495057;
+            transition: all 0.2s ease;
+        }
+
+        .cart-quantity-controls .btn-outline-secondary:hover {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+
+        .cart-quantity-controls .btn-danger {
+            background: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .cart-quantity-controls .btn-danger:hover {
+            background: #bb2d3b;
+            border-color: #b02a37;
+            transform: scale(0.95);
+        }
+
+        /* Profile Button Styles */
+        .nav-icons .icon {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 50%;
+            margin-left: 10px;
+            color: var(--dark-gray);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-icons .icon:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Badge count for cart and wishlist */
+        .badge-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--secondary);
+            color: white;
+            font-size: 11px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Mobile Navigation Icons (includes profile, cart, wishlist) */
+        .nav-icons.d-lg-none {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-icons.d-lg-none .icon {
+            margin: 0;
+            width: 50px;
+            height: 50px;
+        }
+
+        /* Desktop Navigation Icons */
+        .nav-icons.d-none.d-lg-flex {
+            display: flex;
+            gap: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation (same as shop) -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="logo1.png" alt="" height="50px" width="65px">FashionCart
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="shop.html">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">Cart</a>
+                    </li>
+                </ul>
+                <div class="nav-icons d-flex align-items-center">
+                    <a href="profile.html" class="icon">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <a href="wishlist.html" class="icon">
+                        <i class="far fa-heart"></i>
+                        <span class="badge-count" id="wishlistCountDesktop">0</span>
+                    </a>
+                    <a href="cart.html" class="icon">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="badge-count" id="cartCountDesktop">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="checkout-header">
+        <div class="container">
+            <h1 data-aos="fade-up">Checkout</h1>
+            <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="100">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="shop.html">Shop</a></li>
+                    <li class="breadcrumb-item"><a href="cart.html">Cart</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Checkout Progress -->
+    <div class="container">
+        <div class="checkout-progress">
+            <div class="progress-step completed">
+                <div class="step-number">1</div>
+                <div class="step-label">Cart</div>
+            </div>
+            <div class="progress-step active">
+                <div class="step-number">2</div>
+                <div class="step-label">Checkout</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">3</div>
+                <div class="step-label">Payment</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">4</div>
+                <div class="step-label">Complete</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Checkout Content -->
+    <div class="checkout-container">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Billing & Shipping Forms -->
+                <div class="col-lg-8">
+                    <div data-aos="fade-up">
+                        <h3 class="section-title">Billing Information</h3>
+                        <form id="checkoutForm">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" placeholder="John" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" placeholder="Doe" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" placeholder="john@example.com" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" placeholder="+91 98765 43210" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Street Address</label>
+                                    <input type="text" class="form-control" placeholder="123 Main St" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">City</label>
+                                    <input type="text" class="form-control" placeholder="Mumbai" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">State</label>
+                                    <select class="form-select">
+                                        <option selected>Maharashtra</option>
+                                        <option>Delhi</option>
+                                        <option>Karnataka</option>
+                                        <option>Tamil Nadu</option>
+                                        <option>Uttar Pradesh</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">PIN Code</label>
+                                    <input type="text" class="form-control" placeholder="400001" required>
+                                </div>
+                            </div>
+
+                            <div class="form-check mt-4">
+                                <input class="form-check-input" type="checkbox" id="sameAsShipping" checked>
+                                <label class="form-check-label" for="sameAsShipping">
+                                    Shipping address is the same as billing
+                                </label>
+                            </div>
+
+                            <hr class="my-5">
+
+                            <h3 class="section-title">Payment Method</h3>
+                            <div class="payment-method selected">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard"
+                                        checked>
+                                    <label class="form-check-label" for="creditCard">
+                                        <i class="fas fa-credit-card me-2"></i> Credit / Debit Card
+                                    </label>
+                                </div>
+                                <div class="row mt-3" id="creditCardFields">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">Card Number</label>
+                                        <input type="text" class="form-control" placeholder="1234 5678 9012 3456">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Expiry Date</label>
+                                        <input type="text" class="form-control" placeholder="MM/YY">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">CVV</label>
+                                        <input type="text" class="form-control" placeholder="123">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-method">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="upi">
+                                    <label class="form-check-label" for="upi">
+                                        <i class="fas fa-mobile-alt me-2"></i> UPI
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="payment-method">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="cod">
+                                    <label class="form-check-label" for="cod">
+                                        <i class="fas fa-money-bill-wave me-2"></i> Cash on Delivery
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-check mt-4">
+                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    I have read and agree to the <a href="#" style="color: var(--secondary);">Terms &
+                                        Conditions</a>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-checkout mt-4 d-lg-none">
+                                <i class="fas fa-lock me-2"></i>Place Order
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-lg-4">
+                    <div class="order-summary" data-aos="fade-up" data-aos-delay="100">
+                        <h4 class="mb-4">Your Order</h4>
+                        <div id="cartItemsContainer">
+                            <!-- Cart items will be loaded dynamically via JavaScript -->
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-secondary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="summary-totals" id="summaryTotals">
+                            <div class="total-row">
+                                <span>Subtotal</span>
+                                <span id="subtotal">₹0.00</span>
+                            </div>
+                            <div class="total-row">
+                                <span>Shipping</span>
+                                <span id="shipping">₹50.00</span>
+                            </div>
+                            <div class="total-row grand-total">
+                                <span>Total</span>
+                                <span id="total">₹0.00</span>
+                            </div>
+                        </div>
+                        <button type="submit" form="checkoutForm" class="btn btn-checkout d-none d-lg-block">
+                            <i class="fas fa-lock me-2"></i>Place Order
+                        </button>
+                        <p class="text-muted text-center mt-3 mb-0 small">
+                            <i class="fas fa-shield-alt me-1"></i> Secure checkout
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>FashionCart</h5>
+                    <p style="color: rgba(255,255,255,0.7);">Your premier destination for fashion and lifestyle. Quality
+                        products, exceptional service.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 footer-links">
+                    <h5>Shop</h5>
+                    <ul>
+                        <li><a href="#">Men's Fashion</a></li>
+                        <li><a href="#">Women's Fashion</a></li>
+                        <li><a href="#">Kids & Teens</a></li>
+                        <li><a href="#">Footwear</a></li>
+                        <li><a href="#">Accessories</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 footer-links">
+                    <h5>Support</h5>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Shipping Policy</a></li>
+                        <li><a href="#">Returns & Exchanges</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <h5>Newsletter</h5>
+                    <p style="color: rgba(255,255,255,0.7);">Subscribe to get special offers and updates.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Your email"
+                            style="background: rgba(255,255,255,0.1); border: none; color: white;">
+                        <button class="btn btn-secondary" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 FashionCart. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // ===== CHECKOUT PAGE – WITH ORDER SAVING AND AUTO-FILL USER DETAILS =====
+        AOS.init({ duration: 1000, once: true, offset: 100 });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            navbar?.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ---------- USER & CART HELPERS ----------
+        function getCurrentUser() {
+            try {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                return user && user.id ? user : null;
+            } catch {
+                return null;
+            }
+        }
+
+        // ---------- ADDRESS & PHONE MANAGEMENT ----------
+        function getUserAddresses() {
+            const currentUser = getCurrentUser();
+            if (!currentUser) return [];
+
+            const allAddresses = JSON.parse(localStorage.getItem('userAddresses')) || {};
+            return allAddresses[currentUser.id] || [];
+        }
+
+        function saveUserAddress(address) {
+            const currentUser = getCurrentUser();
+            if (!currentUser) return;
+
+            const allAddresses = JSON.parse(localStorage.getItem('userAddresses')) || {};
+
+            if (!allAddresses[currentUser.id]) {
+                allAddresses[currentUser.id] = [];
+            }
+
+            // Add timestamp and ID to address
+            const newAddress = {
+                ...address,
+                id: Date.now(),
+                savedAt: new Date().toISOString(),
+                lastUsed: new Date().toISOString()
+            };
+
+            // Check if address already exists (compare fields)
+            const existingIndex = allAddresses[currentUser.id].findIndex(addr =>
+                addr.street === address.street &&
+                addr.city === address.city &&
+                addr.state === address.state &&
+                addr.pincode === address.pincode
+            );
+
+            if (existingIndex !== -1) {
+                // Update last used timestamp
+                allAddresses[currentUser.id][existingIndex].lastUsed = new Date().toISOString();
+            } else {
+                // Add new address
+                allAddresses[currentUser.id].push(newAddress);
+            }
+
+            localStorage.setItem('userAddresses', JSON.stringify(allAddresses));
+        }
+
+        // ---------- PHONE NUMBER MANAGEMENT ----------
+        function getUserPhoneNumbers() {
+            const currentUser = getCurrentUser();
+            if (!currentUser) return [];
+
+            const allPhones = JSON.parse(localStorage.getItem('userPhones')) || {};
+            return allPhones[currentUser.id] || [];
+        }
+
+        function saveUserPhone(phone) {
+            const currentUser = getCurrentUser();
+            if (!currentUser) return;
+
+            if (!phone || phone.trim() === '') return;
+
+            const allPhones = JSON.parse(localStorage.getItem('userPhones')) || {};
+
+            if (!allPhones[currentUser.id]) {
+                allPhones[currentUser.id] = [];
+            }
+
+            // Clean phone number
+            const cleanPhone = phone.trim();
+
+            // Check if phone already exists
+            const existingIndex = allPhones[currentUser.id].findIndex(p =>
+                p.number === cleanPhone
+            );
+
+            const phoneEntry = {
+                number: cleanPhone,
+                id: Date.now(),
+                savedAt: new Date().toISOString(),
+                lastUsed: new Date().toISOString()
+            };
+
+            if (existingIndex !== -1) {
+                // Update last used timestamp
+                allPhones[currentUser.id][existingIndex].lastUsed = new Date().toISOString();
+            } else {
+                // Add new phone
+                allPhones[currentUser.id].push(phoneEntry);
+            }
+
+            localStorage.setItem('userPhones', JSON.stringify(allPhones));
+            return phoneEntry;
+        }
+
+        // ---------- DISPLAY SAVED ADDRESSES AND PHONES ----------
+        function displaySavedAddressesAndPhones() {
+            const addresses = getUserAddresses();
+            const phones = getUserPhoneNumbers();
+
+            // Display saved addresses
+            if (addresses.length > 0) {
+                displaySavedAddresses(addresses);
+            }
+
+            // Display saved phone numbers
+            if (phones.length > 0) {
+                displaySavedPhones(phones);
+            }
+        }
+
+        function displaySavedAddresses(addresses) {
+            const addressSection = document.querySelector('.row.g-4');
+            if (!addressSection) return;
+
+            let addressSelector = document.getElementById('savedAddressSelector');
+            if (!addressSelector) {
+                addressSelector = document.createElement('div');
+                addressSelector.id = 'savedAddressSelector';
+                addressSelector.className = 'col-12 mb-4';
+                addressSelector.innerHTML = `
+                <label class="form-label fw-bold">📦 Saved Addresses</label>
+                <div class="saved-addresses-container">
+                    ${addresses.map((addr, index) => `
+                        <div class="saved-address-card ${index === 0 ? 'selected' : ''}" data-address-id="${addr.id}">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="savedAddress" 
+                                       id="addr_${addr.id}" ${index === 0 ? 'checked' : ''}
+                                       data-address='${JSON.stringify(addr).replace(/'/g, "&apos;")}'>
+                                <label class="form-check-label" for="addr_${addr.id}">
+                                    <strong>📍 ${addr.street}</strong><br>
+                                    <small>${addr.city}, ${addr.state} - ${addr.pincode}</small><br>
+                                    <small class="text-muted">🕒 Last used: ${new Date(addr.lastUsed).toLocaleDateString()}</small>
+                                </label>
+                            </div>
+                        </div>
+                    `).join('')}
+                    <div class="saved-address-card new-address-card">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="savedAddress" id="new_address">
+                            <label class="form-check-label" for="new_address">
+                                <strong>➕ Enter New Address</strong>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                // Insert after the phone number field
+                const phoneField = document.querySelector('input[placeholder="+91 98765 43210"]')?.closest('.col-12');
+                if (phoneField) {
+                    phoneField.parentNode.insertBefore(addressSelector, phoneField.nextSibling);
+                }
+            }
+
+            // Add event listeners to address radio buttons
+            document.querySelectorAll('input[name="savedAddress"]').forEach(radio => {
+                radio.removeEventListener('change', handleAddressChange);
+                radio.addEventListener('change', handleAddressChange);
+            });
+        }
+
+        function handleAddressChange(e) {
+            if (this.id === 'new_address') {
+                clearAddressFields();
+            } else {
+                const addressData = JSON.parse(this.dataset.address);
+                fillAddressFields(addressData);
+            }
+
+            // Update selected card styling
+            document.querySelectorAll('.saved-address-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            this.closest('.saved-address-card').classList.add('selected');
+        }
+
+        function displaySavedPhones(phones) {
+            const phoneField = document.querySelector('input[placeholder="+91 98765 43210"]')?.closest('.col-12');
+            if (!phoneField) return;
+
+            let phoneSelector = document.getElementById('savedPhoneSelector');
+            if (!phoneSelector) {
+                phoneSelector = document.createElement('div');
+                phoneSelector.id = 'savedPhoneSelector';
+                phoneSelector.className = 'col-12 mb-3';
+                phoneSelector.innerHTML = `
+                <label class="form-label fw-bold">📱 Saved Phone Numbers</label>
+                <div class="saved-phones-container">
+                    ${phones.map((phone, index) => `
+                        <div class="saved-phone-card ${index === 0 ? 'selected' : ''}" data-phone-id="${phone.id}">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="savedPhone" 
+                                       id="phone_${phone.id}" ${index === 0 ? 'checked' : ''}
+                                       data-phone="${phone.number}">
+                                <label class="form-check-label" for="phone_${phone.id}">
+                                    <strong>📞 ${phone.number}</strong><br>
+                                    <small class="text-muted">🕒 Last used: ${new Date(phone.lastUsed).toLocaleDateString()}</small>
+                                </label>
+                            </div>
+                        </div>
+                    `).join('')}
+                    <div class="saved-phone-card new-phone-card">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="savedPhone" id="new_phone">
+                            <label class="form-check-label" for="new_phone">
+                                <strong>➕ Enter New Phone Number</strong>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                // Insert before the address section
+                phoneField.parentNode.insertBefore(phoneSelector, phoneField.nextSibling);
+            }
+
+            // Add event listeners to phone radio buttons
+            document.querySelectorAll('input[name="savedPhone"]').forEach(radio => {
+                radio.removeEventListener('change', handlePhoneChange);
+                radio.addEventListener('change', handlePhoneChange);
+            });
+
+            // Auto-fill the first phone number
+            if (phones.length > 0) {
+                const phoneInput = document.querySelector('input[placeholder="+91 98765 43210"]');
+                if (phoneInput) {
+                    phoneInput.value = phones[0].number;
+                }
+            }
+        }
+
+        function handlePhoneChange(e) {
+            const phoneInput = document.querySelector('input[placeholder="+91 98765 43210"]');
+            if (!phoneInput) return;
+
+            if (this.id === 'new_phone') {
+                phoneInput.value = '';
+                phoneInput.focus();
+            } else {
+                phoneInput.value = this.dataset.phone;
+            }
+
+            // Update selected card styling
+            document.querySelectorAll('.saved-phone-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            this.closest('.saved-phone-card').classList.add('selected');
+        }
+
+        function fillAddressFields(address) {
+            const addressInput = document.querySelector('input[placeholder="123 Main St"]');
+            const cityInput = document.querySelector('input[placeholder="Mumbai"]');
+            const stateSelect = document.querySelector('.form-select');
+            const pincodeInput = document.querySelector('input[placeholder="400001"]');
+
+            if (addressInput) addressInput.value = address.street || '';
+            if (cityInput) cityInput.value = address.city || '';
+            if (pincodeInput) pincodeInput.value = address.pincode || '';
+
+            if (stateSelect && address.state) {
+                const options = Array.from(stateSelect.options);
+                const matchingOption = options.find(opt =>
+                    opt.value.toLowerCase() === address.state.toLowerCase() ||
+                    opt.text.toLowerCase() === address.state.toLowerCase()
+                );
+                if (matchingOption) {
+                    stateSelect.value = matchingOption.value;
+                }
+            }
+        }
+
+        function clearAddressFields() {
+            const addressInput = document.querySelector('input[placeholder="123 Main St"]');
+            const cityInput = document.querySelector('input[placeholder="Mumbai"]');
+            const stateSelect = document.querySelector('.form-select');
+            const pincodeInput = document.querySelector('input[placeholder="400001"]');
+
+            if (addressInput) addressInput.value = '';
+            if (cityInput) cityInput.value = '';
+            if (pincodeInput) pincodeInput.value = '';
+            if (stateSelect) stateSelect.selectedIndex = 0;
+        }
+
+        // ---------- AUTO-FILL USER DETAILS FROM currentUser ----------
+        function autoFillUserDetails() {
+            const currentUser = getCurrentUser();
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Get form fields
+            const firstNameInput = document.querySelector('input[placeholder="John"]');
+            const lastNameInput = document.querySelector('input[placeholder="Doe"]');
+            const emailInput = document.querySelector('input[placeholder="john@example.com"]');
+            const phoneInput = document.querySelector('input[placeholder="+91 98765 43210"]');
+
+            // ---------- AUTO-FILL FIRST NAME ----------
+            if (firstNameInput && currentUser.firstName) {
+                firstNameInput.value = currentUser.firstName;
+            }
+
+            // ---------- AUTO-FILL LAST NAME ----------
+            if (lastNameInput && currentUser.lastName) {
+                lastNameInput.value = currentUser.lastName;
+            }
+
+            // ---------- AUTO-FILL EMAIL ----------
+            if (emailInput && currentUser.email) {
+                emailInput.value = currentUser.email;
+            }
+
+            // ---------- AUTO-FILL PHONE FROM SAVED PHONES OR USERS ARRAY ----------
+            try {
+                // First try to get from saved phones
+                const savedPhones = getUserPhoneNumbers();
+                if (savedPhones.length > 0 && phoneInput) {
+                    phoneInput.value = savedPhones[0].number;
+                } else {
+                    // Then try from users array
+                    const allUsers = JSON.parse(localStorage.getItem('users')) || [];
+                    const matchedUser = allUsers.find(u =>
+                        u.id === currentUser.id || u.email === currentUser.email
+                    );
+
+                    if (phoneInput && matchedUser) {
+                        if (matchedUser.phone) phoneInput.value = matchedUser.phone;
+                        else if (matchedUser.mobile) phoneInput.value = matchedUser.mobile;
+                        else if (matchedUser.contact) phoneInput.value = matchedUser.contact;
+                        else if (matchedUser.phoneNumber) phoneInput.value = matchedUser.phoneNumber;
+                    }
+                }
+            } catch (e) {
+                console.log('Could not load phone number');
+            }
+
+            // Display saved addresses and phones
+            displaySavedAddressesAndPhones();
+        }
+
+        // Load cart items into summary
+        function loadCartSummary() {
+            const container = document.getElementById('cartItemsContainer');
+            const subtotalSpan = document.getElementById('subtotal');
+            const totalSpan = document.getElementById('total');
+
+            const currentUser = getCurrentUser();
+            if (!currentUser) {
+                container.innerHTML = `<div class="empty-cart"><i class="fas fa-exclamation-circle"></i><h3>Please login to checkout</h3><a href="login.html" class="btn btn-dark">Login</a></div>`;
+                subtotalSpan.textContent = totalSpan.textContent = '₹0.00';
+                return;
+            }
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(item => item.user == currentUser.id);
+
+            if (!cart.length) {
+                container.innerHTML = `<div class="empty-cart"><i class="fas fa-shopping-cart"></i><h3>Your cart is empty</h3><a href="shop.html" class="btn btn-dark">Continue Shopping</a></div>`;
+                subtotalSpan.textContent = totalSpan.textContent = '₹0.00';
+                return;
+            }
+
+            let html = '', subtotal = 0;
+            cart.forEach(item => {
+                const price = parseFloat(item.price) || 0;
+                const qty = item.quantity || 1;
+                const itemTotal = price * qty;
+                subtotal += itemTotal;
+                html += `<div class="summary-item">
+                    <div class="item-info">
+                        <img src="${item.image || 'https://via.placeholder.com/60'}" alt="${item.name}">
+                        <div class="item-details">
+                            <h5>${item.name}</h5>
+                            <p>Qty: ${qty} | Size: ${item.selectedSize || 'M'}</p>
+                            <p style="color: var(--secondary);">₹${price.toFixed(2)}</p>
+                        </div>
+                    </div>
+                    <span>₹${itemTotal.toFixed(2)}</span>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+            subtotalSpan.textContent = `₹${subtotal.toFixed(2)}`;
+            totalSpan.textContent = `₹${(subtotal + 50).toFixed(2)}`;
+        }
+
+        // Update navbar cart/wishlist counts
+        function updateCounts() {
+            const currentUser = getCurrentUser();
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (currentUser) cart = cart.filter(item => item.user == currentUser.id);
+            const cartCount = cart.reduce((sum, i) => sum + (i.quantity || 1), 0);
+
+            const cartDesktop = document.getElementById('cartCountDesktop');
+            const cartMobile = document.getElementById('cartCountMobile');
+            if (cartDesktop) cartDesktop.textContent = cartCount;
+            if (cartMobile) cartMobile.textContent = cartCount;
+
+            let wish = JSON.parse(localStorage.getItem('wishlist')) || [];
+            if (currentUser) wish = wish.filter(item => item.uid === currentUser.id);
+
+            const wishDesktop = document.getElementById('wishlistCountDesktop');
+            const wishMobile = document.getElementById('wishlistCountMobile');
+            if (wishDesktop) wishDesktop.textContent = wish.length;
+            if (wishMobile) wishMobile.textContent = wish.length;
+        }
+
+        // ---------- SAVE ORDER WITH USER DETAILS ----------
+        function saveOrder(cart, total, shipping, paymentMethod) {
+            const currentUser = getCurrentUser();
+            if (!currentUser) return;
+
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+            // Get additional user details from users array if available
+            let userDetails = { ...currentUser };
+
+            try {
+                const allUsers = JSON.parse(localStorage.getItem('users')) || [];
+                const matchedUser = allUsers.find(u => u.id === currentUser.id || u.email === currentUser.email);
+                if (matchedUser) {
+                    userDetails = { ...userDetails, ...matchedUser };
+                }
+            } catch (e) { }
+
+            // Get current form values
+            const firstName = document.querySelector('input[placeholder="John"]')?.value || currentUser.firstName || '';
+            const lastName = document.querySelector('input[placeholder="Doe"]')?.value || currentUser.lastName || '';
+            const email = document.querySelector('input[placeholder="john@example.com"]')?.value || currentUser.email || '';
+            const phone = document.querySelector('input[placeholder="+91 98765 43210"]')?.value || '';
+
+            const address = document.querySelector('input[placeholder="123 Main St"]')?.value || '';
+            const city = document.querySelector('input[placeholder="Mumbai"]')?.value || '';
+            const state = document.querySelector('.form-select')?.value || '';
+            const pincode = document.querySelector('input[placeholder="400001"]')?.value || '';
+
+            // Save phone number for future use
+            if (phone && phone.trim() !== '') {
+                saveUserPhone(phone);
+            }
+
+            // Save address for future use
+            const currentAddress = {
+                street: address,
+                city: city,
+                state: state,
+                pincode: pincode
+            };
+
+            if (address && city && state && pincode) {
+                saveUserAddress(currentAddress);
+            }
+
+            const newOrder = {
+                orderId: 'ORD-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+                userId: currentUser.id,
+                date: new Date().toISOString(),
+
+                userInfo: {
+                    firstName: currentUser.firstName || firstName,
+                    lastName: currentUser.lastName || lastName,
+                    fullName: `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim(),
+                    email: currentUser.email || email,
+                    phone: phone,
+                    loggedInAt: currentUser.loggedInAt
+                },
+
+                billingAddress: currentAddress,
+
+                items: cart.map(item => ({
+                    id: item.id,
+                    name: item.name,
+                    price: parseFloat(item.price),
+                    quantity: item.quantity || 1,
+                    size: item.selectedSize || 'M',
+                    color: item.selectedColor || 'Black',
+                    image: item.image,
+                    brand: item.brand || ''
+                })),
+
+                subtotal: cart.reduce((sum, i) => sum + (parseFloat(i.price) * (i.quantity || 1)), 0),
+                shipping: shipping,
+                total: total,
+                paymentMethod: paymentMethod,
+
+                status: 'Processing',
+                paymentStatus: paymentMethod === 'Cash on Delivery' ? 'Pending' : 'Paid',
+                orderDate: new Date().toLocaleDateString('en-IN'),
+                estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN')
+            };
+
+            orders.push(newOrder);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            return newOrder.orderId;
+        }
+
+        // ---------- HANDLE PLACE ORDER ----------
+        function initCheckoutForm() {
+            const form = document.getElementById('checkoutForm');
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                if (!document.getElementById('terms').checked) {
+                    alert('Please agree to the Terms & Conditions.');
+                    return;
+                }
+
+                const currentUser = getCurrentUser();
+                if (!currentUser) {
+                    alert('Please login to place order.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                let allCart = JSON.parse(localStorage.getItem('cart')) || [];
+                let userCart = allCart.filter(item => item.user == currentUser.id);
+
+                if (userCart.length === 0) {
+                    alert('Your cart is empty.');
+                    return;
+                }
+
+                // Validate phone number
+                const phoneInput = document.querySelector('input[placeholder="+91 98765 43210"]');
+                if (!phoneInput || !phoneInput.value.trim()) {
+                    alert('Please enter your phone number.');
+                    phoneInput?.focus();
+                    return;
+                }
+
+                let paymentMethod = 'Credit Card';
+                if (document.getElementById('upi').checked) paymentMethod = 'UPI';
+                else if (document.getElementById('cod').checked) paymentMethod = 'Cash on Delivery';
+
+                const subtotal = userCart.reduce((sum, i) => sum + (parseFloat(i.price) * (i.quantity || 1)), 0);
+                const shipping = 50;
+                const total = subtotal + shipping;
+
+                const orderId = saveOrder(userCart, total, shipping, paymentMethod);
+
+                allCart = allCart.filter(item => item.user != currentUser.id);
+                localStorage.setItem('cart', JSON.stringify(allCart));
+
+                updateCounts();
+
+                alert(`✅ Order placed successfully!\nOrder ID: ${orderId}\nThank you for shopping with us, ${currentUser.firstName || ''}!`);
+                window.location.href = 'my-orders.html?orderId=' + orderId;
+            });
+        }
+
+        // ---------- PAYMENT METHOD TOGGLE ----------
+        function initPaymentMethods() {
+            const credit = document.getElementById('creditCard');
+            const cardFields = document.getElementById('creditCardFields');
+
+            function toggle() {
+                if (cardFields) {
+                    cardFields.style.display = credit?.checked ? 'block' : 'none';
+                }
+            }
+
+            document.querySelectorAll('[name="paymentMethod"]').forEach(r => r.addEventListener('change', toggle));
+            toggle();
+        }
+
+        // ---------- CHECK LOGIN BEFORE CHECKOUT ----------
+        function checkLogin() {
+            const currentUser = getCurrentUser();
+            if (!currentUser) {
+                localStorage.setItem('redirectAfterLogin', window.location.href);
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // ---------- ADD CSS FOR ADDRESS AND PHONE CARDS ----------
+        function addCardStyles() {
+            const style = document.createElement('style');
+            style.textContent = `
+            .saved-addresses-container,
+            .saved-phones-container {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 10px;
+            }
+            
+            .saved-address-card,
+            .saved-phone-card {
+                border: 2px solid var(--border);
+                border-radius: var(--radius);
+                padding: 15px;
+                transition: var(--transition);
+                cursor: pointer;
+            }
+            
+            .saved-address-card:hover,
+            .saved-phone-card:hover {
+                border-color: var(--secondary);
+            }
+            
+            .saved-address-card.selected,
+            .saved-phone-card.selected {
+                border-color: var(--secondary);
+                background: rgba(255, 107, 139, 0.05);
+            }
+            
+            .saved-address-card .form-check,
+            .saved-phone-card .form-check {
+                margin: 0;
+            }
+            
+            .saved-address-card .form-check-input:checked,
+            .saved-phone-card .form-check-input:checked {
+                background-color: var(--secondary);
+                border-color: var(--secondary);
+            }
+            
+            .new-address-card,
+            .new-phone-card {
+                border-style: dashed;
+                background: rgba(0,0,0,0.02);
+            }
+            
+            .new-address-card:hover,
+            .new-phone-card:hover {
+                background: rgba(255, 107, 139, 0.05);
+            }
+        `;
+            document.head.appendChild(style);
+        }
+
+        // ---------- ON PAGE LOAD ----------
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add CSS styles
+            addCardStyles();
+
+            // First check if user is logged in
+            if (!checkLogin()) return;
+
+            // Auto-fill user details from currentUser
+            autoFillUserDetails();
+
+            // Load cart and other functions
+            loadCartSummary();
+            updateCounts();
+            initPaymentMethods();
+            initCheckoutForm();
+
+            // Listen for storage changes
+            window.addEventListener('storage', function (e) {
+                if (e.key === 'cart' || e.key === 'currentUser' || e.key === 'users' ||
+                    e.key === 'userAddresses' || e.key === 'userPhones') {
+                    loadCartSummary();
+                    updateCounts();
+                    if (e.key === 'currentUser' || e.key === 'userAddresses' || e.key === 'userPhones') {
+                        autoFillUserDetails();
+                    }
+                }
+            });
+        });
+
+        // Make functions globally available
+        window.goToPage = function (page) {
+            window.location.href = page;
+        };
+    </script>
+</body>
+
+</html>
