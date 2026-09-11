@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Checkout | FashionCart Luxury Store</title>
+  <link rel="icon" href="logo2.png" type="image/png">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AOS Scroll Animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- FashionCart Luxury Design System -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <script>
+    const savedTheme = localStorage.getItem('fc_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+</head>
+
+<body>
+
+  <!-- ==================== STICKY LUXURY NAVBAR ==================== -->
+  <nav class="luxury-navbar">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a href="index.html" class="navbar-brand-luxury">
+        <i class="fas fa-gem gradient-text me-1"></i>Fashion<span>Cart</span>
+      </a>
+
+      <div class="d-flex align-items-center gap-3">
+        <button class="nav-action-btn theme-toggle-btn" id="themeToggleBtn" title="Toggle Light / Dark Mode" onclick="FashionUI.toggleTheme()">
+          <i class="fas fa-sun text-warning"></i>
+        </button>
+        <div class="d-flex align-items-center gap-2 text-success small fw-bold">
+          <i class="fas fa-lock"></i> 256-BIT ENCRYPTED CHECKOUT
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== CHECKOUT CONTAINER ==================== -->
+  <main class="py-5" style="margin-top: 76px;">
+    <div class="container">
+      <div class="row g-5">
+
+        <!-- CHECKOUT FORM -->
+        <div class="col-lg-7">
+          <form id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+
+            <!-- 1. Shipping Details -->
+            <div class="glass-card p-4 mb-4">
+              <h5 class="font-heading fw-bold text-white mb-3">
+                <span class="badge bg-danger rounded-circle me-2" style="width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">1</span>
+                Shipping Address
+              </h5>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label text-light small fw-bold">Full Name *</label>
+                  <input type="text" id="shipFullName" class="form-control bg-dark text-light border-secondary" required placeholder="e.g. Sanjay Thanth">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label text-light small fw-bold">Phone Number *</label>
+                  <input type="tel" id="shipPhone" class="form-control bg-dark text-light border-secondary" required placeholder="e.g. 9876543210">
+                </div>
+                <div class="col-12">
+                  <label class="form-label text-light small fw-bold">Street Address *</label>
+                  <input type="text" id="shipStreet" class="form-control bg-dark text-light border-secondary" required placeholder="Flat, House no., Apartment, Street">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label text-light small fw-bold">City *</label>
+                  <input type="text" id="shipCity" class="form-control bg-dark text-light border-secondary" required placeholder="e.g. Mumbai">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label text-light small fw-bold">State *</label>
+                  <input type="text" id="shipState" class="form-control bg-dark text-light border-secondary" required placeholder="e.g. Maharashtra">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label text-light small fw-bold">Postal Code (PIN) *</label>
+                  <input type="text" id="shipPostal" class="form-control bg-dark text-light border-secondary" required placeholder="e.g. 400001">
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Payment Method & Interactive 3D Card -->
+            <div class="glass-card p-4 mb-4">
+              <h5 class="font-heading fw-bold text-white mb-3">
+                <span class="badge bg-danger rounded-circle me-2" style="width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">2</span>
+                Payment Options
+              </h5>
+
+              <!-- Payment Method Selector -->
+              <div class="d-flex gap-3 mb-4">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="payMethod" id="payCard" value="card" checked onchange="togglePaymentView('card')">
+                  <label class="form-check-label text-light fw-bold" for="payCard"><i class="far fa-credit-card me-1"></i>Card</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="payMethod" id="payUPI" value="upi" onchange="togglePaymentView('upi')">
+                  <label class="form-check-label text-light fw-bold" for="payUPI"><i class="fas fa-qrcode me-1"></i>UPI / QR</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="payMethod" id="payCOD" value="cod" onchange="togglePaymentView('cod')">
+                  <label class="form-check-label text-light fw-bold" for="payCOD"><i class="fas fa-money-bill-wave me-1"></i>Cash on Delivery</label>
+                </div>
+              </div>
+
+              <!-- CARD PAYMENT VIEW (WITH 3D CARD PREVIEW) -->
+              <div id="cardPaymentBox">
+                <!-- 3D Card Object -->
+                <div class="credit-card-3d-wrap">
+                  <div class="credit-card-3d" id="card3D">
+                    <!-- FRONT FACE -->
+                    <div class="card-face card-front">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold tracking-wider" style="font-size: 1.1rem; letter-spacing: 0.1em;">FashionCart Elite</span>
+                        <i class="fab fa-cc-mastercard fa-2x text-warning"></i>
+                      </div>
+                      <div class="my-3">
+                        <i class="fas fa-microchip fa-2x text-warning mb-2 d-block"></i>
+                        <div class="h4 fw-bold mb-0 font-monospace" id="previewCardNumber" style="letter-spacing: 0.15em;">•••• •••• •••• ••••</div>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-end">
+                        <div>
+                          <small class="text-white-50 text-uppercase d-block" style="font-size: 0.65rem;">Card Holder</small>
+                          <div class="fw-bold text-uppercase" id="previewCardName" style="font-size: 0.85rem;">YOUR NAME</div>
+                        </div>
+                        <div class="text-end">
+                          <small class="text-white-50 text-uppercase d-block" style="font-size: 0.65rem;">Expires</small>
+                          <div class="fw-bold" id="previewCardExpiry" style="font-size: 0.85rem;">MM/YY</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- BACK FACE (CVV) -->
+                    <div class="card-face card-back">
+                      <div style="background: #000; height: 40px; width: 100%; margin-top: 10px;"></div>
+                      <div class="px-4 my-auto">
+                        <small class="text-white-50 d-block text-end mb-1" style="font-size: 0.7rem;">CVV / CVC</small>
+                        <div class="bg-white text-dark text-end p-2 rounded fw-bold font-monospace" id="previewCardCVV">•••</div>
+                      </div>
+                      <div class="px-4 text-center">
+                        <small class="text-white-50" style="font-size: 0.65rem;">Authorized signature & 256-bit secure bank channel</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card Inputs -->
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label class="form-label text-light small fw-bold">Card Number</label>
+                    <input type="text" id="cardNumInput" class="form-control bg-dark text-light border-secondary" placeholder="1234 5678 9012 3456" maxlength="19" oninput="updateCardNumber(this)">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label text-light small fw-bold">Cardholder Name</label>
+                    <input type="text" id="cardNameInput" class="form-control bg-dark text-light border-secondary" placeholder="Name on card" oninput="updateCardName(this)">
+                  </div>
+                  <div class="col-md-3 col-6">
+                    <label class="form-label text-light small fw-bold">Expiry Date</label>
+                    <input type="text" id="cardExpInput" class="form-control bg-dark text-light border-secondary" placeholder="MM/YY" maxlength="5" oninput="updateCardExpiry(this)">
+                  </div>
+                  <div class="col-md-3 col-6">
+                    <label class="form-label text-light small fw-bold">CVV</label>
+                    <input type="password" id="cardCVVInput" class="form-control bg-dark text-light border-secondary" placeholder="123" maxlength="3" onfocus="flipCard(true)" onblur="flipCard(false)" oninput="updateCardCVV(this)">
+                  </div>
+                </div>
+              </div>
+
+              <!-- UPI PAYMENT VIEW -->
+              <div id="upiPaymentBox" class="d-none text-center py-4">
+                <div class="glass-card p-4 d-inline-block">
+                  <i class="fas fa-qrcode fa-5x text-white mb-3"></i>
+                  <h6 class="text-white fw-bold">Scan with any UPI App</h6>
+                  <p class="text-muted small mb-0">Google Pay, PhonePe, Paytm, or BHIM</p>
+                </div>
+              </div>
+
+              <!-- COD VIEW -->
+              <div id="codPaymentBox" class="d-none text-center py-4">
+                <div class="glass-card p-4 d-inline-block">
+                  <i class="fas fa-truck-loading fa-3x text-success mb-3"></i>
+                  <h6 class="text-white fw-bold">Cash on Delivery Eligible</h6>
+                  <p class="text-muted small mb-0">Pay in cash or UPI when your parcel is delivered to your doorstep.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-luxury w-100 py-3 font-display" id="placeOrderBtn">
+              <i class="fas fa-lock me-2"></i>Place Order & Pay
+            </button>
+          </form>
+        </div>
+
+        <!-- STICKY ORDER SUMMARY -->
+        <div class="col-lg-5">
+          <div class="glass-card p-4 sticky-top" style="top: 100px;">
+            <h5 class="font-heading fw-bold text-white mb-3">Order Items (<span id="summaryCount">0</span>)</h5>
+            
+            <div id="summaryItemsList" class="mb-3 overflow-auto" style="max-height: 280px;">
+              <!-- Dynamically populated -->
+            </div>
+
+            <hr class="border-secondary my-3">
+
+            <div class="d-flex justify-content-between text-secondary mb-2 small">
+              <span>Subtotal</span>
+              <span class="text-light fw-bold" id="sumSubtotal">₹0</span>
+            </div>
+
+            <div class="d-flex justify-content-between text-secondary mb-2 small">
+              <span>Shipping Fee</span>
+              <span class="text-success fw-bold" id="sumShipping">FREE</span>
+            </div>
+
+            <div class="d-flex justify-content-between text-secondary mb-2 small">
+              <span>GST (5%)</span>
+              <span class="text-light" id="sumTax">₹0</span>
+            </div>
+
+            <div class="d-flex justify-content-between text-success mb-2 small fw-bold d-none" id="sumDiscountRow">
+              <span>Promo Discount</span>
+              <span id="sumDiscount">-₹0</span>
+            </div>
+
+            <hr class="border-secondary my-3">
+
+            <div class="d-flex justify-content-between align-items-baseline">
+              <span class="h6 fw-bold text-white mb-0">Grand Total</span>
+              <span class="h4 fw-bold text-white mb-0" id="sumGrandTotal" style="font-family: var(--font-display);">₹0</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+
+  <script>
+    let appliedCoupon = null;
+
+    function initCheckout() {
+      const cart = FashionAPI.store.getCart();
+      if (!cart || cart.length === 0) {
+        FashionUI.showToast('Your bag is empty! Redirecting to shop...', 'info');
+        setTimeout(() => window.location.href = 'shop.html', 1500);
+        return;
+      }
+
+      // Pre-fill user details if logged in
+      const user = FashionAPI.auth.getUser();
+      if (user) {
+        document.getElementById('shipFullName').value = user.name || '';
+        document.getElementById('shipPhone').value = user.phone || '';
+        if (user.addresses && user.addresses.length > 0) {
+          const addr = user.addresses[0];
+          document.getElementById('shipStreet').value = addr.street || '';
+          document.getElementById('shipCity').value = addr.city || '';
+          document.getElementById('shipState').value = addr.state || '';
+          document.getElementById('shipPostal').value = addr.postalCode || '';
+        }
+      }
+
+      // Load saved coupon
+      try {
+        const saved = localStorage.getItem('fc_applied_coupon');
+        if (saved) appliedCoupon = JSON.parse(saved);
+      } catch (e) {}
+
+      renderOrderSummary();
+    }
+
+    function renderOrderSummary() {
+      const cart = FashionAPI.store.getCart();
+      document.getElementById('summaryCount').textContent = FashionAPI.store.getCartCount();
+
+      const list = document.getElementById('summaryItemsList');
+      list.innerHTML = cart.map(i => `
+        <div class="d-flex align-items-center gap-3 mb-2 pb-2 border-bottom border-secondary border-opacity-10">
+          <img src="${i.image}" alt="${i.name}" style="width: 45px; height: 55px; object-fit: cover; border-radius: 4px;" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100'">
+          <div class="flex-grow-1">
+            <div class="text-white small fw-bold text-truncate" style="max-width: 180px;">${i.name}</div>
+            <div class="text-muted" style="font-size: 0.75rem;">Size: ${i.selectedSize || 'M'} | Qty: ${i.quantity}</div>
+          </div>
+          <div class="text-white small fw-bold">₹${i.price * i.quantity}</div>
+        </div>
+      `).join('');
+
+      const subtotal = FashionAPI.store.getCartSubtotal();
+      const shipping = subtotal >= 999 ? 0 : 99;
+      const tax = Math.round(subtotal * 0.05);
+      const discount = appliedCoupon ? appliedCoupon.discountAmount : 0;
+      const total = Math.max(0, subtotal + shipping + tax - discount);
+
+      document.getElementById('sumSubtotal').textContent = `₹${subtotal}`;
+      document.getElementById('sumShipping').textContent = shipping === 0 ? 'FREE' : `₹${shipping}`;
+      document.getElementById('sumTax').textContent = `₹${tax}`;
+
+      if (discount > 0) {
+        document.getElementById('sumDiscountRow').classList.remove('d-none');
+        document.getElementById('sumDiscount').textContent = `-₹${discount}`;
+      }
+
+      document.getElementById('sumGrandTotal').textContent = `₹${total}`;
+    }
+
+    // 3D Card Interactive Listeners
+    function flipCard(flipped) {
+      const card = document.getElementById('card3D');
+      if (flipped) card.classList.add('flipped');
+      else card.classList.remove('flipped');
+    }
+
+    function updateCardNumber(el) {
+      let v = el.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+      let matches = v.match(/\d{4,16}/g);
+      let match = matches && matches[0] || '';
+      let parts = [];
+      for (let i = 0; i < match.length; i += 4) {
+        parts.push(match.substring(i, i + 4));
+      }
+      if (parts.length) {
+        el.value = parts.join(' ');
+        document.getElementById('previewCardNumber').textContent = parts.join(' ');
+      } else {
+        document.getElementById('previewCardNumber').textContent = '•••• •••• •••• ••••';
+      }
+    }
+
+    function updateCardName(el) {
+      document.getElementById('previewCardName').textContent = el.value.trim().toUpperCase() || 'YOUR NAME';
+    }
+
+    function updateCardExpiry(el) {
+      document.getElementById('previewCardExpiry').textContent = el.value.trim() || 'MM/YY';
+    }
+
+    function updateCardCVV(el) {
+      document.getElementById('previewCardCVV').textContent = el.value.trim() || '•••';
+    }
+
+    function togglePaymentView(method) {
+      document.getElementById('cardPaymentBox').classList.add('d-none');
+      document.getElementById('upiPaymentBox').classList.add('d-none');
+      document.getElementById('codPaymentBox').classList.add('d-none');
+
+      if (method === 'card') document.getElementById('cardPaymentBox').classList.remove('d-none');
+      else if (method === 'upi') document.getElementById('upiPaymentBox').classList.remove('d-none');
+      else if (method === 'cod') document.getElementById('codPaymentBox').classList.remove('d-none');
+    }
+
+    async function handlePlaceOrder(e) {
+      e.preventDefault();
+      const btn = document.getElementById('placeOrderBtn');
+
+      if (!FashionAPI.auth.isLoggedIn()) {
+        FashionUI.showToast('Please sign in or register to complete your order.', 'info');
+        setTimeout(() => window.location.href = 'login.html', 1200);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Securing Transaction & Deducting Stock...`;
+
+      const shippingAddress = {
+        fullName: document.getElementById('shipFullName').value,
+        phone: document.getElementById('shipPhone').value,
+        street: document.getElementById('shipStreet').value,
+        city: document.getElementById('shipCity').value,
+        state: document.getElementById('shipState').value,
+        postalCode: document.getElementById('shipPostal').value,
+        country: 'India'
+      };
+
+      const payMethod = document.querySelector('input[name="payMethod"]:checked')?.value || 'card';
+      const cart = FashionAPI.store.getCart();
+
+      try {
+        const res = await FashionAPI.orders.create({
+          items: cart,
+          shippingAddress,
+          paymentMethod: payMethod,
+          couponApplied: appliedCoupon
+        });
+
+        FashionUI.showToast('Order confirmed! Stock successfully reserved.', 'success');
+        if (window.FashionAnimations) {
+          FashionAnimations.triggerConfetti();
+        }
+        localStorage.removeItem('fc_applied_coupon');
+        FashionAPI.store.clearCart();
+
+        setTimeout(() => {
+          window.location.href = `my-orders.html?orderId=${res.order.orderId}&success=true`;
+        }, 1200);
+      } catch (err) {
+        FashionUI.showToast(err.message, 'error');
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fas fa-lock me-2"></i>Place Order & Pay`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initCheckout);
+  </script>
+</body>
+
+</html>

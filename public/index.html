@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FashionCart | Luxury Haute Couture & Contemporary Apparel</title>
+  <link rel="icon" href="logo2.png" type="image/png">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AOS Scroll Animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- FashionCart Luxury Design System -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <script>
+    const savedTheme = localStorage.getItem('fc_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+</head>
+
+<body>
+
+  <!-- ==================== STICKY LUXURY NAVBAR ==================== -->
+  <nav class="luxury-navbar">
+    <div class="container d-flex align-items-center justify-content-between">
+      <!-- Brand Logo -->
+      <a href="index.html" class="navbar-brand-luxury">
+        <i class="fas fa-gem gradient-text me-1"></i>Fashion<span>Cart</span>
+      </a>
+
+      <!-- Navigation Links -->
+      <div class="d-none d-lg-flex align-items-center gap-1">
+        <a href="index.html" class="nav-link-luxury active">Home</a>
+        <a href="shop.html" class="nav-link-luxury">All Collection</a>
+        <a href="shop.html?category=men" class="nav-link-luxury">Men</a>
+        <a href="shop.html?category=women" class="nav-link-luxury">Women</a>
+        <a href="shop.html?category=kids" class="nav-link-luxury">Kids</a>
+        <a href="shop.html?category=ethnic" class="nav-link-luxury">Ethnic</a>
+      </div>
+
+      <!-- Header Search & Actions -->
+      <div class="d-flex align-items-center gap-3">
+        <!-- Live Search -->
+        <div class="header-search d-none d-md-block">
+          <i class="fas fa-search"></i>
+          <input type="text" id="globalSearchInput" placeholder="Search luxury apparel...">
+        </div>
+
+        <!-- Theme Switcher Toggle -->
+        <button class="nav-action-btn theme-toggle-btn" id="themeToggleBtn" title="Toggle Light / Dark Mode" onclick="FashionUI.toggleTheme()">
+          <i class="fas fa-sun text-warning"></i>
+        </button>
+
+        <!-- Wishlist -->
+        <a href="wishlist.html" class="nav-action-btn" title="My Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="nav-badge wishlist-count-badge" id="wishlistBadge" style="display: none;">0</span>
+        </a>
+
+        <!-- Cart Link -->
+        <a href="cart.html" class="nav-action-btn nav-cart-link" id="navCartBtn" title="Shopping Bag">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="nav-badge cart-count-badge" id="cartBadge" style="display: none;">0</span>
+        </a>
+
+        <!-- User Profile Dropdown -->
+        <div id="navUserContainer">
+          <a href="login.html" class="nav-action-btn" title="Sign In">
+            <i class="fas fa-user"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== MARQUEE ANNOUNCEMENT RIBBON ==================== -->
+  <div style="background: linear-gradient(90deg, #ff4b72, #9333ea, #3b82f6); color: #fff; padding: 10px 0; overflow: hidden; margin-top: 76px; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.04em;">
+    <div class="marquee-track">
+      <span class="mx-4"><i class="fas fa-sparkles me-2"></i>USE CODE <strong>VOGUE20</strong> FOR 20% OFF ALL LUXURY WEAR</span>
+      <span class="mx-4">•</span>
+      <span class="mx-4"><i class="fas fa-truck me-2"></i>FREE EXPRESS SHIPPING ON ORDERS OVER ₹999</span>
+      <span class="mx-4">•</span>
+      <span class="mx-4"><i class="fas fa-undo me-2"></i>30-DAY EFFORTLESS RETURNS & EXCHANGES</span>
+      <span class="mx-4">•</span>
+      <span class="mx-4"><i class="fas fa-shield-alt me-2"></i>100% AUTHENTIC DESIGNER VERIFIED</span>
+      <span class="mx-4">•</span>
+      <span class="mx-4"><i class="fas fa-sparkles me-2"></i>USE CODE <strong>VOGUE20</strong> FOR 20% OFF ALL LUXURY WEAR</span>
+      <span class="mx-4">•</span>
+      <span class="mx-4"><i class="fas fa-truck me-2"></i>FREE EXPRESS SHIPPING ON ORDERS OVER ₹999</span>
+    </div>
+  </div>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="py-5 position-relative" style="min-height: 80vh; display: flex; align-items: center;">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6" data-aos="fade-right">
+          <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(255, 75, 114, 0.15); border: 1px solid rgba(255, 75, 114, 0.3); color: var(--accent-rose); font-size: 0.85rem; font-weight: 700;">
+            <i class="fas fa-bolt"></i> AUTUMN / WINTER 2026 COLLECTION
+          </div>
+          <h1 class="display-3 font-heading fw-bold mb-3" style="line-height: 1.15;">
+            Redefining <span class="gradient-text">Elegance</span> with Contemporary Flair
+          </h1>
+          <p class="text-secondary lead mb-4" style="max-width: 520px; font-size: 1.1rem;">
+            Explore curated designer styles, ethically crafted fabrics, and timeless silhouettes engineered to elevate your personal expression.
+          </p>
+
+          <div class="d-flex flex-wrap gap-3">
+            <a href="shop.html" class="btn-luxury">
+              <i class="fas fa-compass"></i> Explore Catalog
+            </a>
+            <a href="#featuredSection" class="btn-glass">
+              <i class="fas fa-fire text-warning"></i> View Trending
+            </a>
+          </div>
+
+          <!-- Trust Badges -->
+          <div class="row g-4 mt-4 pt-3 border-top border-secondary border-opacity-25">
+            <div class="col-4">
+              <h3 class="fw-bold mb-0 gradient-text" data-count="82" data-suffix="+">82+</h3>
+              <small class="text-muted">Signature Styles</small>
+            </div>
+            <div class="col-4">
+              <h3 class="fw-bold mb-0 text-light" data-count="100" data-suffix="%">100%</h3>
+              <small class="text-muted">Stock Verified</small>
+            </div>
+            <div class="col-4">
+              <h3 class="fw-bold mb-0 text-warning" data-count="4.9" data-suffix=" ★">4.9 ★</h3>
+              <small class="text-muted">Customer Rating</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero 3D Card Visual -->
+        <div class="col-lg-6 text-center position-relative" data-aos="fade-left">
+          <div class="position-relative d-inline-block anim-float">
+            <img src="first_img.jpg.jpeg" alt="Luxury Fashion Model" class="img-fluid rounded-4 shadow-lg" style="max-height: 540px; border: 1px solid var(--border-glass); object-fit: cover;">
+            
+            <!-- Floating Floating Badge 1 -->
+            <div class="glass-card position-absolute p-3 text-start d-flex align-items-center gap-3 shadow-lg" style="bottom: 20px; left: -30px; border-left: 4px solid #10b981; min-width: 220px;">
+              <div class="rounded-circle bg-success bg-opacity-25 p-2 text-success">
+                <i class="fas fa-check-circle fa-lg"></i>
+              </div>
+              <div>
+                <div class="fw-bold text-light" style="font-size: 0.9rem;">Live Stock Ready</div>
+                <small class="text-muted">Instant Dispatch</small>
+              </div>
+            </div>
+
+            <!-- Floating Badge 2 -->
+            <div class="glass-card position-absolute p-3 text-start d-flex align-items-center gap-3 shadow-lg" style="top: 30px; right: -25px; border-left: 4px solid var(--accent-rose); min-width: 200px;">
+              <div class="rounded-circle p-2 text-white" style="background: var(--accent-gradient);">
+                <i class="fas fa-tag"></i>
+              </div>
+              <div>
+                <div class="fw-bold text-light" style="font-size: 0.9rem;">Special Offer</div>
+                <small class="text-warning">Up to 40% Off</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CATEGORIES PORTAL ==================== -->
+  <section class="py-5">
+    <div class="container">
+      <div class="text-center mb-5" data-aos="fade-up">
+        <span class="text-uppercase fw-bold text-secondary" style="letter-spacing: 0.1em; font-size: 0.85rem;">Curated Portals</span>
+        <h2 class="display-5 font-heading fw-bold mt-1">Shop by Category</h2>
+        <div class="mx-auto mt-2" style="width: 60px; height: 3px; background: var(--accent-gradient); border-radius: 2px;"></div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Category: Women -->
+        <div class="col-6 col-md-4 col-lg-2" data-aos="zoom-in" data-aos-delay="50">
+          <a href="shop.html?category=women" class="glass-card d-block text-center p-3 h-100 tilt-card">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow" style="width: 70px; height: 70px; background: rgba(255, 75, 114, 0.15); color: var(--accent-rose); font-size: 1.5rem;">
+              <i class="fas fa-female"></i>
+            </div>
+            <h6 class="fw-bold text-light mb-1">Women</h6>
+            <small class="text-muted">Kurtis, Dresses & Tops</small>
+          </a>
+        </div>
+
+        <!-- Category: Men -->
+        <div class="col-6 col-md-4 col-lg-2" data-aos="zoom-in" data-aos-delay="100">
+          <a href="shop.html?category=men" class="glass-card d-block text-center p-3 h-100 tilt-card">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow" style="width: 70px; height: 70px; background: rgba(59, 130, 246, 0.15); color: #3b82f6; font-size: 1.5rem;">
+              <i class="fas fa-male"></i>
+            </div>
+            <h6 class="fw-bold text-light mb-1">Men</h6>
+            <small class="text-muted">Shirts, Tees & Formals</small>
+          </a>
+        </div>
+
+        <!-- Category: Kids -->
+        <div class="col-6 col-md-4 col-lg-2" data-aos="zoom-in" data-aos-delay="150">
+          <a href="shop.html?category=kids" class="glass-card d-block text-center p-3 h-100 tilt-card">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow" style="width: 70px; height: 70px; background: rgba(245, 158, 11, 0.15); color: #f59e0b; font-size: 1.5rem;">
+              <i class="fas fa-child"></i>
+            </div>
+            <h6 class="fw-bold text-light mb-1">Kids</h6>
+            <small class="text-muted">Boys & Girls Outfits</small>
+          </a>
+        </div>
+
+        <!-- Category: Ethnic -->
+        <div class="col-6 col-md-4 col-lg-2" data-aos="zoom-in" data-aos-delay="200">
+          <a href="shop.html?category=ethnic" class="glass-card d-block text-center p-3 h-100 tilt-card">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow" style="width: 70px; height: 70px; background: rgba(147, 51, 234, 0.15); color: #9333ea; font-size: 1.5rem;">
+              <i class="fas fa-tshirt"></i>
+            </div>
+            <h6 class="fw-bold text-light mb-1">Ethnic Wear</h6>
+            <small class="text-muted">Silk Sarees & Kurtis</small>
+          </a>
+        </div>
+
+        <!-- Category: Footwear -->
+        <div class="col-6 col-md-4 col-lg-2" data-aos="zoom-in" data-aos-delay="250">
+          <a href="shop.html?category=footwear" class="glass-card d-block text-center p-3 h-100 tilt-card">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow" style="width: 70px; height: 70px; background: rgba(16, 185, 129, 0.15); color: #10b981; font-size: 1.5rem;">
+              <i class="fas fa-shoe-prints"></i>
+            </div>
+            <h6 class="fw-bold text-light mb-1">Footwear</h6>
+            <small class="text-muted">Sneakers & Heels</small>
+          </a>
+        </div>
+
+        <!-- Category: All Collection -->
+        <div class="col-6 col-md-4 col-lg-2" data-aos="zoom-in" data-aos-delay="300">
+          <a href="shop.html" class="glass-card d-block text-center p-3 h-100 tilt-card" style="border-color: var(--accent-rose);">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow" style="width: 70px; height: 70px; background: var(--accent-gradient); color: #fff; font-size: 1.5rem;">
+              <i class="fas fa-th-large"></i>
+            </div>
+            <h6 class="fw-bold text-light mb-1">View All</h6>
+            <small class="text-muted">80+ Products</small>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FLASH DEAL COUNTDOWN BANNER ==================== -->
+  <section class="py-5">
+    <div class="container">
+      <div class="glass-card p-5 position-relative overflow-hidden anim-gradient" style="background: linear-gradient(135deg, rgba(255, 75, 114, 0.2) 0%, rgba(15, 23, 42, 0.9) 60%); border: 1px solid rgba(255, 75, 114, 0.35);" data-aos="fade-up">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-7">
+            <span class="badge bg-danger px-3 py-1 rounded-pill mb-2 text-uppercase fw-bold" style="letter-spacing: 0.05em;">Limited Time Deal</span>
+            <h2 class="display-5 font-heading fw-bold text-white mb-2">Deal of the Day</h2>
+            <p class="text-light text-opacity-75 lead mb-4">
+              Get an extra <strong>20% discount</strong> on all ethnic wear and luxury fashion. Use promo code <strong>VOGUE20</strong> at checkout.
+            </p>
+
+            <!-- Countdown Timer -->
+            <div class="d-flex gap-3 text-center mb-4">
+              <div class="glass-card px-3 py-2" style="min-width: 75px;">
+                <div class="h3 fw-bold mb-0 text-white" id="timerHours">14</div>
+                <small class="text-muted text-uppercase" style="font-size: 0.7rem;">Hours</small>
+              </div>
+              <div class="glass-card px-3 py-2" style="min-width: 75px;">
+                <div class="h3 fw-bold mb-0 text-white" id="timerMinutes">42</div>
+                <small class="text-muted text-uppercase" style="font-size: 0.7rem;">Mins</small>
+              </div>
+              <div class="glass-card px-3 py-2" style="min-width: 75px;">
+                <div class="h3 fw-bold mb-0 text-warning" id="timerSeconds">58</div>
+                <small class="text-muted text-uppercase" style="font-size: 0.7rem;">Secs</small>
+              </div>
+            </div>
+
+            <a href="shop.html?isSale=true" class="btn-luxury">
+              <i class="fas fa-bolt"></i> Claim Flash Offer
+            </a>
+          </div>
+
+          <div class="col-lg-5 text-center d-none d-lg-block">
+            <div class="position-relative d-inline-block">
+              <img src="products/s1.1.webp" alt="Deal Item" class="img-fluid rounded-4 shadow-lg" style="max-height: 300px; object-fit: cover;" onerror="this.src='https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400'">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FEATURED PRODUCTS GRID ==================== -->
+  <section class="py-5" id="featuredSection">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-end justify-content-between mb-4" data-aos="fade-up">
+        <div>
+          <span class="text-uppercase fw-bold text-secondary" style="letter-spacing: 0.1em; font-size: 0.85rem;">Handpicked Selection</span>
+          <h2 class="display-5 font-heading fw-bold mt-1">Trending Products</h2>
+        </div>
+        <a href="shop.html" class="btn-glass mt-3 mt-md-0">
+          View All Products <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="d-flex flex-wrap gap-2 mb-4 pb-2" data-aos="fade-up">
+        <button class="btn btn-outline-light btn-sm rounded-pill px-4 active" onclick="loadFeaturedProducts('all', this)">All</button>
+        <button class="btn btn-outline-light btn-sm rounded-pill px-4" onclick="loadFeaturedProducts('women', this)">Women</button>
+        <button class="btn btn-outline-light btn-sm rounded-pill px-4" onclick="loadFeaturedProducts('men', this)">Men</button>
+        <button class="btn btn-outline-light btn-sm rounded-pill px-4" onclick="loadFeaturedProducts('ethnic', this)">Ethnic</button>
+        <button class="btn btn-outline-light btn-sm rounded-pill px-4" onclick="loadFeaturedProducts('kids', this)">Kids</button>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="row g-4" id="featuredGrid">
+        <!-- Dynamically injected via JavaScript -->
+        <div class="col-12 text-center py-5">
+          <div class="spinner-border text-danger" role="status"></div>
+          <p class="text-secondary mt-3">Connecting to catalog...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== VIP NEWSLETTER PERK ==================== -->
+  <section class="py-5">
+    <div class="container">
+      <div class="glass-card p-5 text-center position-relative" data-aos="zoom-in" style="background: radial-gradient(circle at center, rgba(147, 51, 234, 0.2) 0%, rgba(15, 23, 42, 0.8) 70%);">
+        <div class="mx-auto" style="max-width: 600px;">
+          <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center shadow" style="width: 64px; height: 64px; background: var(--accent-gradient); color: #fff; font-size: 1.6rem;">
+            <i class="fas fa-envelope-open-text"></i>
+          </div>
+          <h2 class="display-6 font-heading fw-bold mb-2">Join the VIP Fashion Club</h2>
+          <p class="text-secondary mb-4">
+            Receive exclusive seasonal lookbooks, early access to private flash sales, and a <strong>₹500 welcome coupon</strong> directly to your inbox.
+          </p>
+
+          <form class="d-flex flex-column flex-sm-row gap-2" onsubmit="event.preventDefault(); FashionUI.showToast('Welcome to the VIP Club! Use code WELCOME10 for 10% off.', 'success'); this.reset();">
+            <input type="email" class="form-control form-control-lg bg-dark text-light border-secondary" placeholder="Enter your email address..." required style="border-radius: var(--radius-full); font-size: 0.95rem; padding-left: 20px;">
+            <button type="submit" class="btn-luxury px-4 py-3 flex-shrink-0">
+              Subscribe Now
+            </button>
+          </form>
+          <small class="text-muted d-block mt-3">We respect your privacy. Unsubscribe anytime with 1 click.</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="luxury-footer">
+    <div class="container">
+      <div class="row g-4 mb-5">
+        <div class="col-lg-4">
+          <a href="index.html" class="navbar-brand-luxury mb-3 d-inline-block">
+            <i class="fas fa-gem gradient-text me-1"></i>Fashion<span>Cart</span>
+          </a>
+          <p class="text-secondary" style="font-size: 0.92rem; max-width: 320px;">
+            Elevating modern wardrobe experiences with bespoke craftsmanship, luxury aesthetics, and seamless cloud shopping.
+          </p>
+          <div class="d-flex gap-2 mt-3">
+            <a href="#" class="nav-action-btn"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="nav-action-btn"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="nav-action-btn"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="nav-action-btn"><i class="fab fa-pinterest-p"></i></a>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <h6 class="footer-heading">Collections</h6>
+          <ul class="footer-links">
+            <li><a href="shop.html?category=women">Women's Couture</a></li>
+            <li><a href="shop.html?category=men">Men's Apparel</a></li>
+            <li><a href="shop.html?category=ethnic">Traditional Sarees</a></li>
+            <li><a href="shop.html?category=kids">Kids & Youth</a></li>
+            <li><a href="shop.html?isSale=true">Seasonal Clearance</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <h6 class="footer-heading">Customer Care</h6>
+          <ul class="footer-links">
+            <li><a href="my-orders.html">Track Order</a></li>
+            <li><a href="cart.html">Shopping Bag</a></li>
+            <li><a href="wishlist.html">Wishlist</a></li>
+            <li><a href="profile.html">My Account</a></li>
+            <li><a href="#" onclick="event.preventDefault(); FashionUI.showToast('Free Express Shipping on orders over ₹999. Hassle-free 15-day returns.', 'info')">Shipping & Returns</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <h6 class="footer-heading">Quick Links</h6>
+          <ul class="footer-links">
+            <li><a href="admin.html">Admin Dashboard</a></li>
+            <li><a href="login.html">Sign In / Register</a></li>
+            <li><a href="#" onclick="event.preventDefault(); FashionUI.showToast('Size Guide: S (36in), M (38-40in), L (42in), XL (44in). True to fit.', 'info')">Size Calculator</a></li>
+            <li><a href="#" onclick="event.preventDefault(); FashionUI.showToast('FashionCart enforces strict 256-bit encryption & privacy protection.', 'info')">Privacy Policy</a></li>
+            <li><a href="#" onclick="event.preventDefault(); FashionUI.showToast('All purchases backed by our 100% authenticity guarantee.', 'info')">Terms of Service</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-3 col-lg-2">
+          <h6 class="footer-heading">Payment Security</h6>
+          <p class="text-secondary small mb-2">Encrypted 256-bit SSL transaction channel.</p>
+          <div class="d-flex gap-2 text-secondary" style="font-size: 1.6rem;">
+            <i class="fab fa-cc-visa text-primary"></i>
+            <i class="fab fa-cc-mastercard text-danger"></i>
+            <i class="fab fa-google-pay text-light"></i>
+            <i class="fas fa-qrcode text-warning"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 border-top border-secondary border-opacity-25 text-center text-muted small">
+        <p class="mb-0">© 2026 FashionCart Inc. All Rights Reserved. Crafted for full-stack excellence.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- AOS Scroll Animations -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- FashionCart Core Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+
+  <script>
+    // Initialize AOS
+    AOS.init({ duration: 800, once: true });
+
+    // Flash Deal Timer Countdown
+    let totalSeconds = 14 * 3600 + 42 * 60 + 58;
+    setInterval(() => {
+      if (totalSeconds <= 0) return;
+      totalSeconds--;
+      const hrs = Math.floor(totalSeconds / 3600);
+      const mins = Math.floor((totalSeconds % 3600) / 60);
+      const secs = totalSeconds % 60;
+      document.getElementById('timerHours').textContent = String(hrs).padStart(2, '0');
+      document.getElementById('timerMinutes').textContent = String(mins).padStart(2, '0');
+      document.getElementById('timerSeconds').textContent = String(secs).padStart(2, '0');
+    }, 1000);
+
+    // Fetch and display featured products dynamically from MongoDB
+    async function loadFeaturedProducts(category = 'all', btn = null) {
+      if (btn) {
+        document.querySelectorAll('#featuredSection .btn-outline-light').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+
+      const grid = document.getElementById('featuredGrid');
+      grid.innerHTML = `
+        <div class="col-12 text-center py-5">
+          <div class="spinner-border text-danger" role="status"></div>
+          <p class="text-secondary mt-3">Loading styles...</p>
+        </div>
+      `;
+
+      try {
+        const params = { limit: 8 };
+        if (category !== 'all') params.category = category;
+
+        const res = await FashionAPI.products.getAll(params);
+        if (res.products && res.products.length > 0) {
+          grid.innerHTML = res.products.map(p => `
+            <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up">
+              ${FashionUI.createProductCardHTML(p)}
+            </div>
+          `).join('');
+
+          FashionUI.initTilt3D();
+        } else {
+          grid.innerHTML = `<div class="col-12 text-center py-5"><h4 class="text-secondary">No products found in this category.</h4></div>`;
+        }
+      } catch (err) {
+        console.error('Featured products load error:', err);
+        grid.innerHTML = `<div class="col-12 text-center py-5"><h5 class="text-danger">Failed to load products from database.</h5></div>`;
+      }
+    }
+
+    // Load initial products
+    document.addEventListener('DOMContentLoaded', () => {
+      loadFeaturedProducts();
+    });
+  </script>
+</body>
+
+</html>

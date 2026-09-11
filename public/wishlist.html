@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist | FashionCart Luxury Store</title>
+  <link rel="icon" href="logo2.png" type="image/png">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AOS Scroll Animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- FashionCart Luxury Design System -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <script>
+    const savedTheme = localStorage.getItem('fc_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+</head>
+
+<body>
+
+  <!-- ==================== STICKY LUXURY NAVBAR ==================== -->
+  <nav class="luxury-navbar">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a href="index.html" class="navbar-brand-luxury">
+        <i class="fas fa-gem gradient-text me-1"></i>Fashion<span>Cart</span>
+      </a>
+
+      <div class="d-none d-lg-flex align-items-center gap-1">
+        <a href="index.html" class="nav-link-luxury">Home</a>
+        <a href="shop.html" class="nav-link-luxury">All Collection</a>
+        <a href="wishlist.html" class="nav-link-luxury active">My Wishlist</a>
+      </div>
+
+      <div class="d-flex align-items-center gap-3">
+        <button class="nav-action-btn theme-toggle-btn" id="themeToggleBtn" title="Toggle Light / Dark Mode" onclick="FashionUI.toggleTheme()">
+          <i class="fas fa-sun text-warning"></i>
+        </button>
+
+        <a href="cart.html" class="nav-action-btn nav-cart-link" id="navCartBtn" title="Shopping Bag">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="nav-badge cart-count-badge" id="cartBadge" style="display: none;">0</span>
+        </a>
+
+        <div id="navUserContainer">
+          <a href="login.html" class="nav-action-btn" title="Sign In">
+            <i class="fas fa-user"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== WISHLIST VIEW ==================== -->
+  <main class="py-5" style="margin-top: 76px; min-height: 70vh;">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="font-heading display-6 fw-bold text-white mb-1">My Saved Wishlist</h1>
+          <p class="text-secondary small mb-0">Review items you've curated. Move them to bag whenever you're ready.</p>
+        </div>
+
+        <button class="btn btn-luxury btn-sm" id="moveAllBtn" onclick="moveAllToCart()">
+          <i class="fas fa-shopping-bag me-1"></i>Move All to Bag
+        </button>
+      </div>
+
+      <div id="wishlistContainer">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="luxury-footer">
+    <div class="container text-center text-muted small">
+      <p class="mb-0">© 2026 FashionCart Inc. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+
+  <script>
+    function renderWishlist() {
+      const wishlist = FashionAPI.store.getWishlist();
+      const container = document.getElementById('wishlistContainer');
+      const moveAllBtn = document.getElementById('moveAllBtn');
+
+      if (!wishlist || wishlist.length === 0) {
+        if (moveAllBtn) moveAllBtn.style.display = 'none';
+        container.innerHTML = `
+          <div class="glass-card p-5 text-center my-4">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background: rgba(255, 75, 114, 0.1); color: var(--accent-rose); font-size: 2rem;">
+              <i class="far fa-heart"></i>
+            </div>
+            <h3 class="font-heading text-white mb-2">Your Wishlist is Empty</h3>
+            <p class="text-secondary mb-4">Save pieces you love by tapping the heart icon while browsing our collections.</p>
+            <a href="shop.html" class="btn-luxury">Explore Contemporary Styles</a>
+          </div>
+        `;
+        return;
+      }
+
+      if (moveAllBtn) moveAllBtn.style.display = 'inline-flex';
+
+      container.innerHTML = `
+        <div class="row g-4">
+          ${wishlist.map(item => `
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="product-card tilt-card" style="height: 100%;">
+                <div class="product-card-img-wrap">
+                  <a href="product.html?id=${item.id || item.productId}" class="product-card-img-link" title="View details of ${item.name}">
+                    <img src="${item.image}" alt="${item.name}" class="product-card-img" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500'">
+                  </a>
+                  
+                  <div class="product-card-actions" style="opacity: 1; transform: none;">
+                    <button class="action-icon-btn active" title="Remove" onclick="removeFromWishlist(${item.id || item.productId})">
+                      <i class="fas fa-trash-alt text-danger"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="product-card-body">
+                  <span class="product-category">${item.category || 'Luxury'}</span>
+                  <a href="product.html?id=${item.id || item.productId}" class="product-title" style="font-size: 1rem;">${item.name}</a>
+                  
+                  <div class="product-card-price-row">
+                    <span class="product-price">₹${item.price}</span>
+                    ${item.originalPrice ? `<span class="product-original-price">₹${item.originalPrice}</span>` : ''}
+                  </div>
+
+                  <button class="btn-card-cart mt-2" onclick="moveItemToBag(${item.id || item.productId}, this)">
+                    <i class="fas fa-shopping-bag"></i> Move to Bag
+                  </button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      FashionUI.initTilt3D();
+    }
+
+    function removeFromWishlist(id) {
+      const wishlist = FashionAPI.store.getWishlist();
+      const item = wishlist.find(i => (i.id || i.productId) === id);
+      if (item) {
+        FashionAPI.store.toggleWishlist(item);
+      } else {
+        FashionAPI.store.toggleWishlist({ id: id });
+      }
+      renderWishlist();
+    }
+
+    async function moveItemToBag(productId, btn) {
+      try {
+        const res = await FashionAPI.products.getById(productId);
+        if (res.product) {
+          const img = btn.closest('.product-card')?.querySelector('.product-card-img');
+          FashionAPI.store.addToCart(res.product, 1, null, null, img);
+          FashionAPI.store.toggleWishlist(res.product);
+          renderWishlist();
+        }
+      } catch (err) {
+        FashionUI.showToast(err.message, 'error');
+      }
+    }
+
+    async function moveAllToCart() {
+      const wishlist = FashionAPI.store.getWishlist();
+      for (const item of wishlist) {
+        try {
+          const res = await FashionAPI.products.getById(item.id || item.productId);
+          if (res.product && res.product.stockQuantity > 0) {
+            FashionAPI.store.addToCart(res.product, 1);
+          }
+        } catch (e) {}
+      }
+      FashionAPI.store.saveWishlist([]);
+      FashionUI.showToast('All in-stock items moved to your shopping bag!', 'success');
+      renderWishlist();
+    }
+
+    document.addEventListener('DOMContentLoaded', renderWishlist);
+  </script>
+</body>
+
+</html>

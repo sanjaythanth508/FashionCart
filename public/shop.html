@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop Collection | FashionCart Luxury Catalog</title>
+  <link rel="icon" href="logo2.png" type="image/png">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AOS Scroll Animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- FashionCart Luxury Design System -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <script>
+    const savedTheme = localStorage.getItem('fc_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <style>
+    .filter-section {
+      border-bottom: 1px solid var(--border-glass);
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+
+    .filter-title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .filter-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: color var(--transition-fast);
+    }
+
+    .filter-item:hover, .filter-item.active {
+      color: var(--accent-rose);
+      font-weight: 600;
+    }
+
+    .color-swatch-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all var(--transition-fast);
+    }
+
+    .color-swatch-circle:hover, .color-swatch-circle.active {
+      transform: scale(1.2);
+      border-color: #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==================== STICKY LUXURY NAVBAR ==================== -->
+  <nav class="luxury-navbar">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a href="index.html" class="navbar-brand-luxury">
+        <i class="fas fa-gem gradient-text me-1"></i>Fashion<span>Cart</span>
+      </a>
+
+      <div class="d-none d-lg-flex align-items-center gap-1">
+        <a href="index.html" class="nav-link-luxury">Home</a>
+        <a href="shop.html" class="nav-link-luxury active">All Collection</a>
+        <a href="shop.html?category=men" class="nav-link-luxury">Men</a>
+        <a href="shop.html?category=women" class="nav-link-luxury">Women</a>
+        <a href="shop.html?category=kids" class="nav-link-luxury">Kids</a>
+        <a href="shop.html?category=ethnic" class="nav-link-luxury">Ethnic</a>
+      </div>
+
+      <div class="d-flex align-items-center gap-3">
+        <div class="header-search d-none d-md-block">
+          <i class="fas fa-search"></i>
+          <input type="text" id="globalSearchInput" placeholder="Search catalog...">
+        </div>
+
+        <!-- Theme Switcher Toggle -->
+        <button class="nav-action-btn theme-toggle-btn" id="themeToggleBtn" title="Toggle Light / Dark Mode" onclick="FashionUI.toggleTheme()">
+          <i class="fas fa-sun text-warning"></i>
+        </button>
+
+        <a href="wishlist.html" class="nav-action-btn" title="My Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="nav-badge wishlist-count-badge" id="wishlistBadge" style="display: none;">0</span>
+        </a>
+
+        <a href="cart.html" class="nav-action-btn nav-cart-link" id="navCartBtn" title="Shopping Bag">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="nav-badge cart-count-badge" id="cartBadge" style="display: none;">0</span>
+        </a>
+
+        <div id="navUserContainer">
+          <a href="login.html" class="nav-action-btn" title="Sign In">
+            <i class="fas fa-user"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== SHOP HEADER BANNER ==================== -->
+  <section class="py-5 shop-header-banner">
+    <div class="container text-center py-3">
+      <h1 class="display-4 font-heading fw-bold text-white mb-2">Curated Luxury Collection</h1>
+      <p class="text-secondary lead mx-auto mb-0" style="max-width: 600px; font-size: 1.05rem;">
+        Discover contemporary styles, handcrafted ethnic silhouettes, and tailored apparel featuring live inventory synchronization.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== CATALOG & FILTER SECTION ==================== -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-4">
+
+        <!-- FILTER SIDEBAR -->
+        <div class="col-lg-3">
+          <div class="d-lg-none mb-3">
+            <button class="btn btn-luxury w-100 d-flex align-items-center justify-content-between py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#filterSidebarCollapse" aria-expanded="false">
+              <span><i class="fas fa-sliders-h me-2"></i>Filter & Refine Collection</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+          </div>
+          <div class="collapse d-lg-block" id="filterSidebarCollapse">
+            <div class="glass-card p-4 sticky-top" style="top: 100px; z-index: 10;">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="fw-bold mb-0 text-white"><i class="fas fa-sliders-h me-2 text-danger"></i>Filters</h5>
+                <button class="btn btn-sm btn-link text-danger text-decoration-none p-0" onclick="resetFilters()">Reset All</button>
+              </div>
+
+            <!-- Categories -->
+            <div class="filter-section">
+              <div class="filter-title">Categories</div>
+              <div id="categoryFilterList">
+                <div class="filter-item active" onclick="setCategoryFilter('all', this)">
+                  <span>All Categories</span>
+                  <span class="badge bg-secondary rounded-pill" id="countAll">82</span>
+                </div>
+                <div class="filter-item" onclick="setCategoryFilter('women', this)">
+                  <span>Women's Fashion</span>
+                  <span class="badge bg-dark rounded-pill">30</span>
+                </div>
+                <div class="filter-item" onclick="setCategoryFilter('men', this)">
+                  <span>Men's Apparel</span>
+                  <span class="badge bg-dark rounded-pill">25</span>
+                </div>
+                <div class="filter-item" onclick="setCategoryFilter('kids', this)">
+                  <span>Kids & Youth</span>
+                  <span class="badge bg-dark rounded-pill">12</span>
+                </div>
+                <div class="filter-item" onclick="setCategoryFilter('ethnic', this)">
+                  <span>Ethnic & Sarees</span>
+                  <span class="badge bg-dark rounded-pill">15</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- In-Stock Only Toggle -->
+            <div class="filter-section">
+              <div class="form-check form-switch d-flex justify-content-between align-items-center ps-0">
+                <label class="form-check-label text-light fw-bold" for="inStockToggle" style="font-size: 0.9rem;">In-Stock Only</label>
+                <input class="form-check-input ms-auto" type="checkbox" id="inStockToggle" onchange="applyFilters()">
+              </div>
+              <small class="text-muted d-block mt-1">Hide out-of-stock items</small>
+            </div>
+
+            <!-- Price Slider -->
+            <div class="filter-section">
+              <div class="filter-title">
+                <span>Max Price</span>
+                <span class="text-danger fw-bold" id="priceDisplay">₹5,000</span>
+              </div>
+              <input type="range" class="form-range" id="priceRange" min="299" max="5000" step="100" value="5000" oninput="document.getElementById('priceDisplay').textContent = '₹' + this.value; applyFilters()">
+              <div class="d-flex justify-content-between text-muted small">
+                <span>₹299</span>
+                <span>₹5,000</span>
+              </div>
+            </div>
+
+            <!-- Size Pills -->
+            <div class="filter-section">
+              <div class="filter-title">Sizes</div>
+              <div class="d-flex flex-wrap gap-2" id="sizeFilterContainer">
+                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 active" onclick="setSizeFilter('', this)">All</button>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="setSizeFilter('S', this)">S</button>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="setSizeFilter('M', this)">M</button>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="setSizeFilter('L', this)">L</button>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="setSizeFilter('XL', this)">XL</button>
+              </div>
+            </div>
+
+            <!-- Rating Filter -->
+            <div class="filter-section border-0 pb-0 mb-0">
+              <div class="filter-title">Customer Rating</div>
+              <div class="d-flex flex-column gap-1">
+                <div class="filter-item" onclick="setRatingFilter(4, this)">
+                  <span><i class="fas fa-star text-warning"></i> 4.0 & Above</span>
+                </div>
+                <div class="filter-item" onclick="setRatingFilter(4.5, this)">
+                  <span><i class="fas fa-star text-warning"></i> 4.5 & Above</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+        <!-- PRODUCTS CATALOG & TOOLBAR -->
+        <div class="col-lg-9">
+          <!-- Catalog Toolbar -->
+          <div class="glass-card p-3 mb-4 d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-secondary small" id="productCountLabel">Loading catalog...</span>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+              <!-- Live Search Input -->
+              <div class="position-relative">
+                <input type="text" id="shopSearchInput" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Filter by keyword..." style="border-radius: var(--radius-full); width: 200px;" oninput="applyFiltersDebounced()">
+              </div>
+
+              <!-- Sort Dropdown -->
+              <select id="sortSelect" class="form-select form-select-sm bg-dark text-light border-secondary" style="border-radius: var(--radius-full); width: auto;" onchange="applyFilters()">
+                <option value="id">Featured</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+                <option value="popular">Most Popular</option>
+                <option value="newest">New Arrivals</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Product Grid -->
+          <div class="row g-4" id="shopGrid">
+            <div class="col-12 text-center py-5">
+              <div class="spinner-border text-danger" role="status"></div>
+              <p class="text-secondary mt-3">Fetching products from database...</p>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div class="d-flex justify-content-center mt-5" id="paginationContainer"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="luxury-footer">
+    <div class="container text-center text-muted small">
+      <p class="mb-0">© 2026 FashionCart Inc. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+
+  <script>
+    AOS.init({ duration: 800, once: true });
+
+    // State
+    const filterState = {
+      category: 'all',
+      size: '',
+      rating: '',
+      maxPrice: 5000,
+      inStockOnly: false,
+      search: '',
+      sort: 'id',
+      page: 1,
+      limit: 12,
+      isSale: false,
+      isNew: false
+    };
+
+    let debounceTimer = null;
+
+    function applyFiltersDebounced() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        filterState.search = document.getElementById('shopSearchInput').value.trim();
+        filterState.page = 1;
+        loadShopProducts();
+      }, 350);
+    }
+
+    function applyFilters() {
+      filterState.maxPrice = document.getElementById('priceRange').value;
+      filterState.inStockOnly = document.getElementById('inStockToggle').checked;
+      filterState.sort = document.getElementById('sortSelect').value;
+      filterState.page = 1;
+      loadShopProducts();
+    }
+
+    function setCategoryFilter(cat, el) {
+      document.querySelectorAll('#categoryFilterList .filter-item').forEach(i => i.classList.remove('active'));
+      if (el) el.classList.add('active');
+      filterState.category = cat;
+      filterState.page = 1;
+      loadShopProducts();
+    }
+
+    function setSizeFilter(size, el) {
+      document.querySelectorAll('#sizeFilterContainer button').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+      filterState.size = size;
+      filterState.page = 1;
+      loadShopProducts();
+    }
+
+    function setRatingFilter(rating, el) {
+      filterState.rating = rating;
+      filterState.page = 1;
+      loadShopProducts();
+    }
+
+    function resetFilters() {
+      document.getElementById('priceRange').value = 5000;
+      document.getElementById('priceDisplay').textContent = '₹5,000';
+      document.getElementById('inStockToggle').checked = false;
+      document.getElementById('shopSearchInput').value = '';
+      document.getElementById('sortSelect').value = 'id';
+      
+      filterState.category = 'all';
+      filterState.size = '';
+      filterState.rating = '';
+      filterState.maxPrice = 5000;
+      filterState.inStockOnly = false;
+      filterState.search = '';
+      filterState.isSale = false;
+      filterState.isNew = false;
+      filterState.page = 1;
+
+      document.querySelectorAll('#categoryFilterList .filter-item').forEach(i => i.classList.remove('active'));
+      document.querySelector('#categoryFilterList .filter-item')?.classList.add('active');
+
+      loadShopProducts();
+    }
+
+    async function loadShopProducts() {
+      const grid = document.getElementById('shopGrid');
+      grid.innerHTML = `
+        <div class="col-12 text-center py-5">
+          <div class="spinner-border text-danger" role="status"></div>
+          <p class="text-secondary mt-3">Loading luxury items...</p>
+        </div>
+      `;
+
+      try {
+        const params = {
+          page: filterState.page,
+          limit: filterState.limit,
+          sort: filterState.sort,
+          maxPrice: filterState.maxPrice
+        };
+
+        if (filterState.category && filterState.category !== 'all') params.category = filterState.category;
+        if (filterState.size) params.size = filterState.size;
+        if (filterState.rating) params.rating = filterState.rating;
+        if (filterState.inStockOnly) params.inStockOnly = 'true';
+        if (filterState.search) params.search = filterState.search;
+        if (filterState.isSale) params.isSale = 'true';
+        if (filterState.isNew) params.isNew = 'true';
+
+        const res = await FashionAPI.products.getAll(params);
+
+        document.getElementById('productCountLabel').textContent = 
+          `Showing ${res.products.length} of ${res.totalProducts} styles`;
+
+        if (res.products && res.products.length > 0) {
+          grid.innerHTML = res.products.map(p => `
+            <div class="col-6 col-md-4" data-aos="fade-up">
+              ${FashionUI.createProductCardHTML(p)}
+            </div>
+          `).join('');
+
+          FashionUI.initTilt3D();
+          renderPagination(res.page, res.totalPages);
+        } else {
+          grid.innerHTML = `
+            <div class="col-12 text-center py-5 glass-card">
+              <i class="fas fa-search-minus fa-3x text-secondary mb-3"></i>
+              <h4 class="text-white">No products found</h4>
+              <p class="text-muted">Try adjusting your filters or price range.</p>
+              <button class="btn btn-luxury btn-sm mt-2" onclick="resetFilters()">Reset All Filters</button>
+            </div>
+          `;
+          document.getElementById('paginationContainer').innerHTML = '';
+        }
+      } catch (err) {
+        console.error('Shop fetch error:', err);
+        grid.innerHTML = `<div class="col-12 text-center py-5"><h5 class="text-danger">Failed to connect to product catalog.</h5></div>`;
+      }
+    }
+
+    function renderPagination(currentPage, totalPages) {
+      if (totalPages <= 1) {
+        document.getElementById('paginationContainer').innerHTML = '';
+        return;
+      }
+
+      let html = `<ul class="pagination pagination-sm gap-2">`;
+      if (currentPage > 1) {
+        html += `<li class="page-item"><button class="btn btn-glass btn-sm" onclick="goToPage(${currentPage - 1})"><i class="fas fa-chevron-left"></i> Prev</button></li>`;
+      }
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<li class="page-item"><button class="btn ${i === currentPage ? 'btn-luxury' : 'btn-glass'} btn-sm px-3" onclick="goToPage(${i})">${i}</button></li>`;
+      }
+      if (currentPage < totalPages) {
+        html += `<li class="page-item"><button class="btn btn-glass btn-sm" onclick="goToPage(${currentPage + 1})">Next <i class="fas fa-chevron-right"></i></button></li>`;
+      }
+      html += `</ul>`;
+      document.getElementById('paginationContainer').innerHTML = html;
+    }
+
+    function goToPage(page) {
+      filterState.page = page;
+      window.scrollTo({ top: 300, behavior: 'smooth' });
+      loadShopProducts();
+    }
+
+    // Read URL parameters on page load (e.g. ?category=men or ?search=...)
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const cat = urlParams.get('category');
+      const search = urlParams.get('search');
+      const isSale = urlParams.get('isSale');
+
+      if (cat) {
+        filterState.category = cat.toLowerCase();
+        // Update sidebar active state
+        document.querySelectorAll('#categoryFilterList .filter-item').forEach(item => {
+          item.classList.remove('active');
+          const itemOnClick = item.getAttribute('onclick') || '';
+          if (itemOnClick.toLowerCase().includes(`'${cat.toLowerCase()}'`)) {
+            item.classList.add('active');
+          }
+        });
+      }
+
+      if (search) {
+        filterState.search = search;
+        const searchInput = document.getElementById('shopSearchInput');
+        if (searchInput) searchInput.value = search;
+      }
+
+      if (isSale === 'true') {
+        filterState.isSale = true;
+      }
+      if (urlParams.get('isNew') === 'true') {
+        filterState.isNew = true;
+      }
+
+      // Load live category counts from API
+      try {
+        const catRes = await FashionAPI.products.getCategories();
+        if (catRes.categories) {
+          let totalCount = 0;
+          catRes.categories.forEach(c => {
+            totalCount += c.count;
+            const item = Array.from(document.querySelectorAll('#categoryFilterList .filter-item')).find(el => {
+              const oc = el.getAttribute('onclick') || '';
+              return oc.toLowerCase().includes(`'${c._id.toLowerCase()}'`);
+            });
+            if (item) {
+              const badge = item.querySelector('.badge');
+              if (badge) badge.textContent = c.count;
+            }
+          });
+          const allBadge = document.getElementById('countAll');
+          if (allBadge) allBadge.textContent = totalCount;
+        }
+      } catch (e) {
+        console.warn('Could not load category counts:', e);
+      }
+
+      loadShopProducts();
+    });
+  </script>
+</body>
+
+</html>

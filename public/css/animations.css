@@ -1,0 +1,804 @@
+/* ==========================================================================
+   FASHIONCART MASTER ANIMATION & 3D TRANSFORMS ENGINE
+   Ultra-Advanced 60fps Physics, 3D Transforms, Shimmer, Cursor & Keyframes
+   Over 55 Bespoke Animations, Transitions & Micro-Interactions
+   ========================================================================== */
+
+/* ==================== 1. SCROLL PROGRESS INDICATOR ==================== */
+#pageScrollProgress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3.5px;
+  width: 0%;
+  background: linear-gradient(90deg, #ff4b72, #9333ea, #3b82f6, #10b981);
+  background-size: 300% 100%;
+  animation: scrollGradientFlow 3s ease infinite;
+  z-index: 10001;
+  box-shadow: 0 0 12px rgba(255, 75, 114, 0.8), 0 0 4px rgba(147, 51, 234, 0.8);
+  pointer-events: none;
+  transition: width 0.08s ease-out;
+}
+
+@keyframes scrollGradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==================== 2. INTERACTIVE CLICK RIPPLE ==================== */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-wave {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 75, 114, 0.35) 60%, transparent 100%);
+  transform: scale(0);
+  animation: rippleAnimation 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes rippleAnimation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ==================== 4. ENTRANCE & REVEAL KEYFRAMES (1-10) ==================== */
+
+/* 1. Fade In Up */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 32px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.anim-fade-up {
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 2. Fade In Down */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -32px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.anim-fade-down {
+  animation: fadeInDown 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 3. Fade In Left */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-35px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.anim-fade-left {
+  animation: fadeInLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 4. Fade In Right */
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(35px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.anim-fade-right {
+  animation: fadeInRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 5. Scale Up */
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.anim-scale-up {
+  animation: scaleUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 6. Zoom In Elastic */
+@keyframes zoomInElastic {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.anim-zoom-elastic {
+  animation: zoomInElastic 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* 7. Blur Reveal */
+@keyframes blurReveal {
+  from {
+    opacity: 0;
+    filter: blur(14px);
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+.anim-blur-reveal {
+  animation: blurReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 8. Bounce In */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.anim-bounce-in {
+  animation: bounceIn 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+}
+
+/* 9. Slide Rotate 3D */
+@keyframes slideRotate3D {
+  from {
+    opacity: 0;
+    transform: perspective(800px) rotateX(25deg) translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(800px) rotateX(0deg) translateY(0);
+  }
+}
+
+.anim-slide-rotate {
+  animation: slideRotate3D 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 10. Cinematic Clip Expand */
+@keyframes clipExpand {
+  from {
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    opacity: 0;
+  }
+  to {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    opacity: 1;
+  }
+}
+
+.anim-clip-expand {
+  animation: clipExpand 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ==================== 5. CONTINUOUS AMBIENT & FLOATING KEYFRAMES (11-20) ==================== */
+
+/* 11. Floating 3D (Subtle Wave) */
+@keyframes float3D {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1.2deg);
+  }
+}
+
+.anim-float {
+  animation: float3D 5s ease-in-out infinite;
+}
+
+/* 12. Floating Subtle (Vertical Breathing) */
+@keyframes floatSubtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.anim-float-subtle {
+  animation: floatSubtle 3.5s ease-in-out infinite;
+}
+
+/* 13. Floating Reverse (Anti-Phase for Asymmetry) */
+@keyframes floatReverse {
+  0%, 100% {
+    transform: translateY(-8px) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(2px) rotate(0.8deg);
+  }
+}
+
+.anim-float-reverse {
+  animation: floatReverse 5.5s ease-in-out infinite;
+}
+
+/* 14. Pulse Glow (Breathing Neon Aura) */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255, 75, 114, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(255, 75, 114, 0.55), 0 0 10px rgba(147, 51, 234, 0.35);
+  }
+}
+
+.anim-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* 15. Aurora Shift (Fluid Mesh Background) */
+@keyframes auroraShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.anim-aurora {
+  background-size: 200% 200%;
+  animation: auroraShift 8s ease infinite;
+}
+
+/* 16. Rotating Border Glow Spin */
+@keyframes borderGlowSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.border-spin-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.border-spin-wrap::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(transparent, rgba(255, 75, 114, 0.4), transparent 30%);
+  animation: borderGlowSpin 6s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 17. Hologram Light Sweep */
+@keyframes hologramSweep {
+  0% {
+    transform: translateX(-100%) skewX(-25deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(250%) skewX(-25deg);
+    opacity: 0;
+  }
+}
+
+.hologram-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.hologram-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  animation: hologramSweep 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* 18. Shimmer Skeleton Gleam */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton, .anim-shimmer {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.14) 50%, rgba(255, 255, 255, 0.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+[data-theme="light"] .skeleton,
+[data-theme="light"] .anim-shimmer {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.03) 25%, rgba(0, 0, 0, 0.08) 50%, rgba(0, 0, 0, 0.03) 75%);
+  background-size: 200% 100%;
+}
+
+/* 19. Infinite Marquee Ribbon */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* 20. Live Stock Beacon Pulse */
+@keyframes pulseDot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.8);
+  }
+  70% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 7px rgba(245, 158, 11, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+  }
+}
+
+@keyframes pulseDotGreen {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.8);
+  }
+  70% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 7px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+/* ==================== 6. INTERACTIVE HOVER & STATE TRANSITIONS (21-30) ==================== */
+
+/* 21. Button Gloss Shine on Hover */
+.btn-luxury {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-luxury::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -120%;
+  width: 60%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: rotate(25deg);
+  transition: left 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.btn-luxury:hover::after {
+  left: 160%;
+}
+
+.btn-luxury:hover {
+  transform: translateY(-2.5px) scale(1.02);
+  box-shadow: 0 10px 25px -4px rgba(255, 75, 114, 0.45);
+}
+
+.btn-luxury:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* 22. 3D Card Tilt & Lift */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
+  will-change: transform;
+}
+
+.card-lift-3d:hover {
+  transform: translateY(-8px) scale(1.015);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 75, 114, 0.25);
+}
+
+/* 23. Ken Burns Image Pan & Zoom */
+@keyframes kenBurns {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate(-1%, -1%);
+  }
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+}
+
+.ken-burns {
+  animation: kenBurns 16s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* 24. Sale/New Badge Jiggle */
+@keyframes badgeJiggle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.05) rotate(-3deg); }
+  75% { transform: scale(1.05) rotate(3deg); }
+}
+
+.badge-jiggle:hover {
+  animation: badgeJiggle 0.45s ease-in-out;
+}
+
+/* 25. Heart Pop (Wishlist Animation) */
+@keyframes heartBurst {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.5) rotate(-12deg); }
+  70% { transform: scale(0.9) rotate(8deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.heart-pop {
+  animation: heartBurst 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* 26. Icon Spring Bounce */
+@keyframes iconBounce {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-6px); }
+  70% { transform: translateY(2px); }
+}
+
+.icon-bounce:hover {
+  animation: iconBounce 0.4s ease;
+}
+
+/* 27. Nav Link Dynamic Underline */
+.nav-link-luxury {
+  position: relative;
+}
+
+.nav-link-luxury::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent-gradient, linear-gradient(135deg, #ff4b72, #9333ea));
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link-luxury:hover::after,
+.nav-link-luxury.active::after {
+  width: 80%;
+}
+
+/* 28. Size/Color Pill Elastic Pop */
+.size-pill, .color-swatch-circle {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.size-pill:hover, .color-swatch-circle:hover {
+  transform: translateY(-2px) scale(1.08);
+}
+
+.size-pill:active, .color-swatch-circle:active {
+  transform: scale(0.94);
+}
+
+/* 29. Delivery Pin Estimator Success Checkmark Bounce */
+@keyframes checkmarkBounce {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.3); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.checkmark-anim {
+  animation: checkmarkBounce 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* 30. Live Cart Item Addition Glow */
+@keyframes cartItemGlow {
+  0% { box-shadow: 0 0 0 0 rgba(255, 75, 114, 0.7); }
+  70% { box-shadow: 0 0 25px 8px rgba(255, 75, 114, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 75, 114, 0); }
+}
+
+.item-added-glow {
+  animation: cartItemGlow 0.9s ease-out;
+}
+
+/* ==================== 7. SPECIALIZED PAGE & CHECKOUT ANIMATIONS (31-40) ==================== */
+
+/* 31. 3D Credit Card Flip (Checkout Page) */
+.credit-card-3d-wrap {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 380px;
+  height: 220px;
+  margin: 0 auto 24px;
+}
+
+.credit-card-3d {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 18px;
+}
+
+.credit-card-3d.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 18px;
+  padding: 24px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #0f172a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.card-face.card-back {
+  transform: rotateY(180deg);
+  padding: 20px 0;
+}
+
+/* 32. Flying Item to Cart Particle */
+.flying-particle {
+  position: fixed;
+  z-index: 10000;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  pointer-events: none;
+  box-shadow: 0 8px 25px rgba(255, 75, 114, 0.6);
+  border: 2px solid #ff4b72;
+  transition: all 0.75s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* 33. Cart Badge Bounce Reaction */
+@keyframes badgeBounce {
+  0%, 100% { transform: scale(1); }
+  35% { transform: scale(1.55); }
+  65% { transform: scale(0.88); }
+}
+
+.badge-bounce {
+  animation: badgeBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 34. Confetti Burst Particle Physics */
+@keyframes confettiFall {
+  0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(800%) rotate(720deg); opacity: 0; }
+}
+
+/* 35. Toast Notifications Slide */
+@keyframes toastSlideIn {
+  from {
+    transform: translate3d(100%, 0, 0) scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(110%, 0, 0) scale(0.92);
+    opacity: 0;
+  }
+}
+
+/* 36. Stepper Liquid Timeline Progress Fill */
+@keyframes liquidFill {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.liquid-progress {
+  animation: liquidFill 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 37. Table Row Staggered Reveal */
+@keyframes tableRowFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table tbody tr {
+  animation: tableRowFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 38. Modal Spring In */
+@keyframes modalSpringIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(20px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.02) translateY(-4px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal.show .modal-dialog {
+  animation: modalSpringIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* 39. Dropdown Fluid Slide */
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdown-menu.show {
+  animation: dropdownSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top right;
+}
+
+/* 40. Smooth Theme Toggle Spin */
+@keyframes themeToggleSpin {
+  0% {
+    transform: rotate(-180deg) scale(0.4);
+    opacity: 0.3;
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==================== 8. STAGGER DELAYS & UTILITY EASINGS (41-55) ==================== */
+.delay-50 { animation-delay: 0.05s !important; }
+.delay-100 { animation-delay: 0.1s !important; }
+.delay-150 { animation-delay: 0.15s !important; }
+.delay-200 { animation-delay: 0.2s !important; }
+.delay-250 { animation-delay: 0.25s !important; }
+.delay-300 { animation-delay: 0.3s !important; }
+.delay-400 { animation-delay: 0.4s !important; }
+.delay-500 { animation-delay: 0.5s !important; }
+.delay-600 { animation-delay: 0.6s !important; }
+.delay-700 { animation-delay: 0.7s !important; }
+.delay-800 { animation-delay: 0.8s !important; }
+.delay-1000 { animation-delay: 1.0s !important; }
+
+.duration-fast { animation-duration: 0.25s !important; }
+.duration-normal { animation-duration: 0.55s !important; }
+.duration-slow { animation-duration: 0.95s !important; }
+
+/* Scroll-triggered reveal state */
+[data-animate] {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+[data-animate].animated {
+  opacity: 1;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

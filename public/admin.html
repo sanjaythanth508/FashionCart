@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Executive Center | FashionCart Control Dashboard</title>
+  <link rel="icon" href="logo2.png" type="image/png">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AOS Scroll Animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- FashionCart Luxury Design System -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <script>
+    const savedTheme = localStorage.getItem('fc_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <style>
+    .admin-sidebar {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      padding: 24px 16px;
+      position: sticky;
+      top: 100px;
+    }
+
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+
+    .admin-nav-item:hover, .admin-nav-item.active {
+      background: rgba(255, 75, 114, 0.15);
+      color: var(--accent-rose);
+      font-weight: 600;
+    }
+
+    .table-dark-glass {
+      --bs-table-bg: transparent !important;
+      --bs-table-color: var(--text-primary) !important;
+      background: transparent !important;
+      color: var(--text-primary) !important;
+    }
+
+    .table-dark-glass th {
+      --bs-table-bg: transparent !important;
+      background: transparent !important;
+      border-bottom: 1px solid var(--border-glass) !important;
+      color: var(--text-muted) !important;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 14px 12px;
+    }
+
+    .table-dark-glass td {
+      --bs-table-bg: transparent !important;
+      background: transparent !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+      padding: 14px 12px;
+      vertical-align: middle;
+      font-size: 0.9rem;
+      color: var(--text-primary) !important;
+    }
+
+    .table-dark-glass tbody tr:hover td {
+      background: rgba(255, 255, 255, 0.03) !important;
+    }
+
+    .stock-badge-live {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-quick-stock {
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-glass);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-quick-stock:hover {
+      background: var(--accent-rose);
+      border-color: transparent;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==================== STICKY LUXURY NAVBAR ==================== -->
+  <nav class="luxury-navbar">
+    <div class="container d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-3">
+        <a href="index.html" class="navbar-brand-luxury">
+          <i class="fas fa-gem gradient-text me-1"></i>Fashion<span>Cart</span>
+        </a>
+        <span class="badge bg-danger rounded-pill px-3 py-1 text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 0.06em;">Admin Portal</span>
+      </div>
+
+      <div class="d-flex align-items-center gap-3">
+        <button class="nav-action-btn theme-toggle-btn" id="themeToggleBtn" title="Toggle Light / Dark Mode" onclick="FashionUI.toggleTheme()">
+          <i class="fas fa-sun text-warning"></i>
+        </button>
+        <a href="index.html" class="btn btn-glass btn-sm">
+          <i class="fas fa-store me-1"></i>Visit Live Store
+        </a>
+        <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="FashionAPI.auth.logout()">
+          <i class="fas fa-sign-out-alt me-1"></i>Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== ADMIN MAIN CONTAINER ==================== -->
+  <main class="py-5" style="margin-top: 76px; min-height: 80vh;">
+    <div class="container" id="adminContainer">
+      <div class="text-center py-5">
+        <div class="spinner-border text-danger" role="status"></div>
+        <p class="text-secondary mt-3">Verifying administrator credentials...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal: Add New Product -->
+  <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content glass-card" style="background: var(--bg-modal); border: 1px solid var(--border-glass-hover); color: var(--text-primary);">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title font-heading fw-bold">Add Luxury Product to Catalog</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="addProductForm" onsubmit="handleCreateProduct(event)">
+            <div class="row g-3">
+              <div class="col-md-8">
+                <label class="form-label small fw-bold text-light">Product Title *</label>
+                <input type="text" id="newProdName" class="form-control bg-dark text-light border-secondary" required placeholder="e.g. Royal Embroidered Silk Kurti">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-light">Category *</label>
+                <select id="newProdCategory" class="form-select bg-dark text-light border-secondary" required>
+                  <option value="women">Women</option>
+                  <option value="men">Men</option>
+                  <option value="kids">Kids</option>
+                  <option value="ethnic">Ethnic</option>
+                  <option value="footwear">Footwear</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-light">Price (₹) *</label>
+                <input type="number" id="newProdPrice" class="form-control bg-dark text-light border-secondary" required min="1" placeholder="799">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-light">Original Price (₹)</label>
+                <input type="number" id="newProdOrigPrice" class="form-control bg-dark text-light border-secondary" placeholder="1299">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-light">Initial Stock Count *</label>
+                <input type="number" id="newProdStock" class="form-control bg-dark text-light border-secondary" required min="0" value="25">
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-bold text-light">Image URL *</label>
+                <input type="url" id="newProdImage" class="form-control bg-dark text-light border-secondary" required placeholder="https://images.unsplash.com/photo-...">
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-bold text-light">Description</label>
+                <textarea id="newProdDesc" rows="3" class="form-control bg-dark text-light border-secondary" placeholder="Details about silhouette, fabrics, and styling..."></textarea>
+              </div>
+              <div class="col-12 mt-4 text-end">
+                <button type="button" class="btn btn-glass btn-sm me-2" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn-luxury btn-sm">Add to Store & Inventory</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+
+  <script>
+    let activeAdminTab = 'inventory';
+    let cachedStats = null;
+    let cachedProducts = [];
+
+    async function verifyAdminAndInit() {
+      const container = document.getElementById('adminContainer');
+
+      if (!FashionAPI.auth.isLoggedIn()) {
+        renderAuthPrompt('Sign In Required', 'Please log in with administrator credentials.');
+        return;
+      }
+
+      const user = FashionAPI.auth.getUser();
+      if (user.role !== 'admin') {
+        renderAuthPrompt('Access Denied', 'Your account does not have administrator privileges.');
+        return;
+      }
+
+      renderDashboardFrame();
+      loadDashboardData();
+    }
+
+    function renderAuthPrompt(title, subtitle) {
+      document.getElementById('adminContainer').innerHTML = `
+        <div class="glass-card p-5 text-center my-5" style="max-width: 500px; margin: 0 auto;">
+          <i class="fas fa-shield-alt fa-3x text-warning mb-3"></i>
+          <h3 class="text-white">${title}</h3>
+          <p class="text-secondary small mb-4">${subtitle}</p>
+          <div class="d-flex flex-column gap-2">
+            <button class="btn btn-luxury" onclick="adminQuickLogin()">
+              <i class="fas fa-key me-2"></i>Sign In as Demo Admin
+            </button>
+            <a href="index.html" class="btn btn-glass btn-sm">Back to Store</a>
+          </div>
+        </div>
+      `;
+    }
+
+    async function adminQuickLogin() {
+      try {
+        await FashionAPI.auth.login('admin@fashioncart.com', 'Admin@123');
+        FashionUI.showToast('Logged in as Administrator', 'success');
+        verifyAdminAndInit();
+      } catch (e) {
+        FashionUI.showToast(e.message, 'error');
+      }
+    }
+
+    function renderDashboardFrame() {
+      document.getElementById('adminContainer').innerHTML = `
+        <!-- KPI METRICS ROW -->
+        <div class="row g-4 mb-4" id="kpiCardsRow">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div class="row g-4">
+          <!-- Left Navigation Menu -->
+          <div class="col-lg-3">
+            <div class="admin-sidebar">
+              <div class="text-muted small text-uppercase fw-bold px-3 mb-2" style="font-size: 0.7rem; letter-spacing: 0.08em;">Management Suite</div>
+              
+              <button class="admin-nav-item active" id="btnTabInventory" onclick="switchAdminTab('inventory')">
+                <i class="fas fa-boxes text-danger"></i> Stock & Inventory
+              </button>
+
+              <button class="admin-nav-item" id="btnTabOrders" onclick="switchAdminTab('orders')">
+                <i class="fas fa-clipboard-list text-primary"></i> Customer Orders
+              </button>
+
+              <button class="admin-nav-item" id="btnTabLogs" onclick="switchAdminTab('logs')">
+                <i class="fas fa-history text-warning"></i> Stock Audit Logs
+              </button>
+
+              <button class="admin-nav-item" id="btnTabUsers" onclick="switchAdminTab('users')">
+                <i class="fas fa-users text-info"></i> Registered Shoppers
+              </button>
+
+              <hr class="border-secondary my-3">
+
+              <button class="btn btn-luxury w-100 btn-sm" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <i class="fas fa-plus me-1"></i>Add New Product
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Content View -->
+          <div class="col-lg-9">
+            <div class="glass-card p-4" id="adminMainContent">
+              <div class="text-center py-5"><div class="spinner-border text-danger"></div></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadDashboardData() {
+      try {
+        const statsRes = await FashionAPI.admin.getDashboardStats();
+        cachedStats = statsRes.stats;
+        renderKPICards(cachedStats);
+        renderActiveTab();
+      } catch (err) {
+        console.error('Admin data load error:', err);
+      }
+    }
+
+    function renderKPICards(stats) {
+      const row = document.getElementById('kpiCardsRow');
+      if (!row) return;
+
+      row.innerHTML = `
+        <div class="col-6 col-md-3">
+          <div class="glass-card tilt-card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="text-muted small">Total Revenue</span>
+              <i class="fas fa-rupee-sign text-success"></i>
+            </div>
+            <h3 class="fw-bold text-white mb-0" style="font-family: var(--font-display);">₹<span data-count="${stats.totalRevenue}">${stats.totalRevenue.toLocaleString()}</span></h3>
+            <small class="text-success small"><i class="fas fa-arrow-up me-1"></i>Active store sales</small>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+          <div class="glass-card tilt-card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="text-muted small">Total Orders</span>
+              <i class="fas fa-shopping-bag text-primary"></i>
+            </div>
+            <h3 class="fw-bold text-white mb-0" style="font-family: var(--font-display);"><span data-count="${stats.totalOrders}">${stats.totalOrders}</span></h3>
+            <small class="text-muted small">${stats.statusCounts.Pending || 0} Pending • ${stats.statusCounts.Delivered || 0} Delivered</small>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+          <div class="glass-card tilt-card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="text-muted small">Stock Units</span>
+              <i class="fas fa-layer-group text-warning"></i>
+            </div>
+            <h3 class="fw-bold text-white mb-0" style="font-family: var(--font-display);"><span data-count="${stats.totalStockUnits}">${stats.totalStockUnits}</span></h3>
+            <small class="text-muted small">${stats.totalProducts} Catalog Products</small>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+          <div class="glass-card tilt-card p-3" style="border-left: 4px solid ${stats.lowStockCount > 0 ? '#f59e0b' : '#10b981'};">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="text-muted small">Low Stock Alert</span>
+              <i class="fas fa-exclamation-triangle ${stats.lowStockCount > 0 ? 'text-warning' : 'text-success'}"></i>
+            </div>
+            <h3 class="fw-bold text-white mb-0" style="font-family: var(--font-display);"><span data-count="${stats.lowStockCount}">${stats.lowStockCount}</span></h3>
+            <small class="text-muted small">Critical inventory threshold</small>
+          </div>
+        </div>
+      `;
+      if (window.FashionAnimations) {
+        FashionAnimations.initNumberCounters();
+        FashionAnimations.init3DCardTilts();
+      }
+    }
+
+    function switchAdminTab(tab) {
+      activeAdminTab = tab;
+      document.querySelectorAll('.admin-nav-item').forEach(btn => btn.classList.remove('active'));
+      if (tab === 'inventory') document.getElementById('btnTabInventory')?.classList.add('active');
+      if (tab === 'orders') document.getElementById('btnTabOrders')?.classList.add('active');
+      if (tab === 'logs') document.getElementById('btnTabLogs')?.classList.add('active');
+      if (tab === 'users') document.getElementById('btnTabUsers')?.classList.add('active');
+      renderActiveTab();
+    }
+
+    async function renderActiveTab() {
+      const main = document.getElementById('adminMainContent');
+      main.innerHTML = `<div class="text-center py-5"><div class="spinner-border text-danger"></div></div>`;
+
+      if (activeAdminTab === 'inventory') {
+        renderInventoryTab(main);
+      } else if (activeAdminTab === 'orders') {
+        renderOrdersTab(main);
+      } else if (activeAdminTab === 'logs') {
+        renderLogsTab(main);
+      } else if (activeAdminTab === 'users') {
+        renderUsersTab(main);
+      }
+    }
+
+    // 1. INVENTORY & STOCK MANAGEMENT
+    async function renderInventoryTab(container) {
+      try {
+        const res = await FashionAPI.products.getAll({ limit: 100 });
+        cachedProducts = res.products || [];
+
+        container.innerHTML = `
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h5 class="font-heading fw-bold text-white mb-0">Live Inventory & Stock Center</h5>
+              <small class="text-muted">Direct stock adjustment synced with MongoDB Atlas</small>
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-glass btn-sm" onclick="filterStockTable('all')">All</button>
+              <button class="btn btn-outline-warning btn-sm" onclick="filterStockTable('low')">Low Stock (&le;5)</button>
+              <button class="btn btn-outline-danger btn-sm" onclick="filterStockTable('out')">Sold Out (0)</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-dark-glass w-100">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock Quantity</th>
+                  <th>Status</th>
+                  <th>Quick Restock</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryTableBody">
+                ${renderStockRows(cachedProducts)}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } catch (err) {
+        container.innerHTML = `<div class="text-danger">Failed to load inventory: ${err.message}</div>`;
+      }
+    }
+
+    function renderStockRows(products) {
+      return products.map(p => {
+        let badgeClass = 'bg-success text-white';
+        let statusText = 'In Stock';
+        if (p.stockQuantity <= 0) {
+          badgeClass = 'bg-danger text-white';
+          statusText = 'Out of Stock';
+        } else if (p.stockQuantity <= (p.lowStockThreshold || 5)) {
+          badgeClass = 'bg-warning text-dark';
+          statusText = 'Low Stock';
+        }
+
+        return `
+          <tr id="row-prod-${p.id}">
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <img src="${p.image}" alt="${p.name}" style="width: 40px; height: 50px; object-fit: cover; border-radius: 4px;">
+                <div>
+                  <div class="fw-bold text-white text-truncate" style="max-width: 200px;">${p.name}</div>
+                  <small class="text-muted">SKU: ${p.sku || `FC-${p.id}`}</small>
+                </div>
+              </div>
+            </td>
+            <td class="text-capitalize text-secondary">${p.category}</td>
+            <td class="fw-bold text-white">₹${p.price}</td>
+            <td>
+              <span class="h6 fw-bold text-white mb-0" id="stock-val-${p.id}">${p.stockQuantity}</span> units
+            </td>
+            <td>
+              <span class="stock-badge-live ${badgeClass}" id="stock-badge-${p.id}">${statusText}</span>
+            </td>
+            <td>
+              <div class="d-flex gap-1">
+                <button class="btn-quick-stock" onclick="quickStockAdjust(${p.id}, 5)">+5</button>
+                <button class="btn-quick-stock" onclick="quickStockAdjust(${p.id}, 20)">+20</button>
+                <button class="btn-quick-stock" onclick="quickStockAdjust(${p.id}, -5)">-5</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterStockTable(type) {
+      let filtered = cachedProducts;
+      if (type === 'low') filtered = cachedProducts.filter(p => p.stockQuantity > 0 && p.stockQuantity <= 5);
+      if (type === 'out') filtered = cachedProducts.filter(p => p.stockQuantity <= 0);
+      document.getElementById('inventoryTableBody').innerHTML = renderStockRows(filtered);
+    }
+
+    async function quickStockAdjust(productId, amount) {
+      try {
+        const res = await FashionAPI.stock.adjustStock(productId, amount, 'Admin quick button adjustment');
+        FashionUI.showToast(res.message, 'success');
+
+        // Update in-memory
+        const prod = cachedProducts.find(p => p.id === productId);
+        if (prod) {
+          prod.stockQuantity = res.product.stockQuantity;
+          prod.stockStatus = res.product.stockStatus;
+        }
+
+        // Live DOM update
+        const valEl = document.getElementById(`stock-val-${productId}`);
+        const badgeEl = document.getElementById(`stock-badge-${productId}`);
+        if (valEl) valEl.textContent = res.product.stockQuantity;
+        if (badgeEl) {
+          badgeEl.textContent = res.product.stockStatus;
+          badgeEl.className = `stock-badge-live ${res.product.stockQuantity <= 0 ? 'bg-danger text-white' : (res.product.stockQuantity <= 5 ? 'bg-warning text-dark' : 'bg-success text-white')}`;
+        }
+      } catch (err) {
+        FashionUI.showToast(err.message, 'error');
+      }
+    }
+
+    // 2. ORDER FULFILLMENT
+    async function renderOrdersTab(container) {
+      try {
+        const res = await FashionAPI.orders.adminGetAll();
+        const orders = res.orders || [];
+
+        container.innerHTML = `
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="font-heading fw-bold text-white mb-0">Customer Orders (${orders.length})</h5>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-dark-glass w-100">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Items</th>
+                  <th>Total Amount</th>
+                  <th>Status</th>
+                  <th>Update Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${orders.map(o => `
+                  <tr>
+                    <td>
+                      <span class="fw-bold text-white font-monospace">${o.orderId}</span>
+                      <small class="text-muted d-block">${new Date(o.createdAt).toLocaleDateString()}</small>
+                    </td>
+                    <td>
+                      <div class="text-white fw-bold">${o.customerName || 'Shopper'}</div>
+                      <small class="text-secondary">${o.customerEmail}</small>
+                    </td>
+                    <td>${o.items.length} garments</td>
+                    <td class="fw-bold text-white">₹${o.pricing?.totalAmount || o.totalAmount}</td>
+                    <td>
+                      <span class="badge ${o.status === 'Delivered' ? 'bg-success' : (o.status === 'Cancelled' ? 'bg-danger' : 'bg-primary')}">${o.status}</span>
+                    </td>
+                    <td>
+                      <select class="form-select form-select-sm bg-dark text-light border-secondary" style="width: auto;" onchange="updateOrderStatus('${o.orderId}', this.value)" ${o.status === 'Cancelled' ? 'disabled' : ''}>
+                        <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                        <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>Processing</option>
+                        <option value="Shipped" ${o.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                        <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                        <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                      </select>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } catch (err) {
+        container.innerHTML = `<div class="text-danger">Failed to load orders: ${err.message}</div>`;
+      }
+    }
+
+    async function updateOrderStatus(orderId, newStatus) {
+      try {
+        await FashionAPI.orders.adminUpdateStatus(orderId, newStatus);
+        FashionUI.showToast(`Order ${orderId} updated to ${newStatus}`, 'success');
+        renderActiveTab();
+      } catch (err) {
+        FashionUI.showToast(err.message, 'error');
+      }
+    }
+
+    // 3. STOCK AUDIT LOGS
+    async function renderLogsTab(container) {
+      try {
+        const res = await FashionAPI.stock.getLogs({ limit: 40 });
+        const logs = res.logs || [];
+
+        container.innerHTML = `
+          <h5 class="font-heading fw-bold text-white mb-3">Inventory Change Audit Trail</h5>
+          <div class="table-responsive">
+            <table class="table table-dark-glass w-100">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Product</th>
+                  <th>Event</th>
+                  <th>Qty Change</th>
+                  <th>Resulting Stock</th>
+                  <th>Initiator</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${logs.map(l => `
+                  <tr>
+                    <td class="text-muted small">${new Date(l.createdAt).toLocaleString()}</td>
+                    <td class="text-white fw-bold">#${l.productId} - ${l.productName}</td>
+                    <td>
+                      <span class="badge ${l.changeType === 'order_sale' ? 'bg-danger' : (l.changeType === 'restock' ? 'bg-success' : 'bg-info')}">${l.changeType}</span>
+                    </td>
+                    <td class="fw-bold ${l.changeAmount >= 0 ? 'text-success' : 'text-danger'}">${l.changeAmount >= 0 ? `+${l.changeAmount}` : l.changeAmount}</td>
+                    <td class="text-light fw-bold">${l.newStock} units</td>
+                    <td class="text-secondary small">${l.performedBy}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } catch (err) {
+        container.innerHTML = `<div class="text-danger">Failed to load logs: ${err.message}</div>`;
+      }
+    }
+
+    // 4. USERS DIRECTORY
+    async function renderUsersTab(container) {
+      try {
+        const res = await FashionAPI.auth.getAllUsers();
+        const users = res.users || [];
+        container.innerHTML = `
+          <h5 class="font-heading fw-bold text-white mb-3">Registered Shoppers (${users.length})</h5>
+          <p class="text-secondary small">Customer profiles, addresses, and authorization credentials managed in MongoDB Atlas.</p>
+          <div class="table-responsive">
+            <table class="table table-dark-glass w-100">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Role</th>
+                  <th>Saved Addresses</th>
+                  <th>Joined Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${users.map(u => `
+                  <tr>
+                    <td>
+                      <div class="text-white fw-bold">${u.name}</div>
+                      <small class="text-secondary">${u.email}</small>
+                    </td>
+                    <td><span class="badge ${u.role === 'admin' ? 'bg-danger' : 'bg-primary'}">${u.role.toUpperCase()}</span></td>
+                    <td><span class="text-light">${u.addresses ? u.addresses.length : 0} saved</span></td>
+                    <td><small class="text-muted">${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'Active'}</small></td>
+                    <td><span class="text-success small fw-bold"><i class="fas fa-check-circle me-1"></i>Active</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } catch (err) {
+        container.innerHTML = `<div class="text-danger">Failed to load users: ${err.message}</div>`;
+      }
+    }
+
+    async function handleCreateProduct(e) {
+      e.preventDefault();
+      const name = document.getElementById('newProdName').value;
+      const category = document.getElementById('newProdCategory').value;
+      const price = Number(document.getElementById('newProdPrice').value);
+      const originalPrice = Number(document.getElementById('newProdOrigPrice').value) || price;
+      const stockQuantity = Number(document.getElementById('newProdStock').value);
+      const image = document.getElementById('newProdImage').value;
+      const description = document.getElementById('newProdDesc').value;
+
+      try {
+        await FashionAPI.products.create({
+          name,
+          category,
+          price,
+          originalPrice,
+          stockQuantity,
+          image,
+          description,
+          sizes: ['S', 'M', 'L', 'XL'],
+          colors: ['black', 'blue', 'white']
+        });
+
+        FashionUI.showToast('Product added to catalog and inventory!', 'success');
+        const modalEl = document.getElementById('addProductModal');
+        if (modalEl) {
+          const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+          modalInstance.hide();
+        }
+        document.getElementById('addProductForm')?.reset();
+        loadDashboardData();
+      } catch (err) {
+        FashionUI.showToast(err.message, 'error');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', verifyAdminAndInit);
+  </script>
+</body>
+
+</html>

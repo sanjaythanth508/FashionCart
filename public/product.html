@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details | FashionCart Luxury Collection</title>
+  <link rel="icon" href="logo2.png" type="image/png">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- AOS Scroll Animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- FashionCart Luxury Design System -->
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <script>
+    const savedTheme = localStorage.getItem('fc_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <style>
+    .gallery-main-img {
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      transition: transform 0.4s ease;
+      background: rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 575.98px) {
+      .gallery-main-img {
+        height: 330px !important;
+      }
+      .gallery-thumb {
+        width: 60px !important;
+        height: 60px !important;
+      }
+    }
+
+    .gallery-thumb {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: 0.6;
+      transition: all var(--transition-fast);
+    }
+
+    .gallery-thumb:hover, .gallery-thumb.active {
+      opacity: 1;
+      border-color: var(--accent-rose);
+      transform: scale(1.05);
+    }
+
+    .qty-stepper {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-full);
+      padding: 4px 8px;
+    }
+
+    .qty-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: color var(--transition-fast);
+    }
+
+    .qty-btn:hover {
+      color: var(--accent-rose);
+    }
+
+    .qty-display {
+      width: 40px;
+      text-align: center;
+      font-weight: 700;
+      color: #fff;
+      font-family: var(--font-display);
+    }
+
+    .star-select {
+      font-size: 1.5rem;
+      color: #64748b;
+      cursor: pointer;
+      transition: color var(--transition-fast);
+    }
+
+    .star-select:hover, .star-select.active {
+      color: #f59e0b;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==================== STICKY LUXURY NAVBAR ==================== -->
+  <nav class="luxury-navbar">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a href="index.html" class="navbar-brand-luxury">
+        <i class="fas fa-gem gradient-text me-1"></i>Fashion<span>Cart</span>
+      </a>
+
+      <div class="d-none d-lg-flex align-items-center gap-1">
+        <a href="index.html" class="nav-link-luxury">Home</a>
+        <a href="shop.html" class="nav-link-luxury active">All Collection</a>
+        <a href="shop.html?category=men" class="nav-link-luxury">Men</a>
+        <a href="shop.html?category=women" class="nav-link-luxury">Women</a>
+        <a href="shop.html?category=kids" class="nav-link-luxury">Kids</a>
+        <a href="shop.html?category=ethnic" class="nav-link-luxury">Ethnic</a>
+      </div>
+
+      <div class="d-flex align-items-center gap-3">
+        <!-- Theme Switcher Toggle -->
+        <button class="nav-action-btn theme-toggle-btn" id="themeToggleBtn" title="Toggle Light / Dark Mode" onclick="FashionUI.toggleTheme()">
+          <i class="fas fa-sun text-warning"></i>
+        </button>
+
+        <a href="wishlist.html" class="nav-action-btn" title="My Wishlist">
+          <i class="far fa-heart"></i>
+          <span class="nav-badge wishlist-count-badge" id="wishlistBadge" style="display: none;">0</span>
+        </a>
+
+        <a href="cart.html" class="nav-action-btn nav-cart-link" id="navCartBtn" title="Shopping Bag">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="nav-badge cart-count-badge" id="cartBadge" style="display: none;">0</span>
+        </a>
+
+        <div id="navUserContainer">
+          <a href="login.html" class="nav-action-btn" title="Sign In">
+            <i class="fas fa-user"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== PRODUCT DETAILS CONTAINER ==================== -->
+  <main class="py-5" style="margin-top: 76px;">
+    <div class="container" id="productContainer">
+      <div class="text-center py-5">
+        <div class="spinner-border text-danger" role="status"></div>
+        <p class="text-secondary mt-3">Fetching luxury product details...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="luxury-footer">
+    <div class="container text-center text-muted small">
+      <p class="mb-0">© 2026 FashionCart Inc. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/animations.js"></script>
+
+  <script>
+    AOS.init({ duration: 800, once: true });
+
+    let currentProduct = null;
+    let selectedQuantity = 1;
+    let selectedSize = '';
+    let selectedColor = '';
+    let selectedRatingScore = 5;
+
+    async function loadProductDetails() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id') || 1;
+
+      try {
+        const res = await FashionAPI.products.getById(productId);
+        currentProduct = res.product;
+        if (!currentProduct) throw new Error('Product not found.');
+
+        selectedSize = currentProduct.sizes?.[0] || 'M';
+        selectedColor = currentProduct.colors?.[0] || 'Default';
+
+        renderProductView(currentProduct, res.relatedProducts || []);
+        loadProductReviews(currentProduct.id);
+      } catch (err) {
+        document.getElementById('productContainer').innerHTML = `
+          <div class="glass-card p-5 text-center my-5">
+            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+            <h3 class="text-white">Product Not Found</h3>
+            <p class="text-secondary">We couldn't retrieve the specifications for this item.</p>
+            <a href="shop.html" class="btn-luxury mt-3"><i class="fas fa-arrow-left me-2"></i>Back to Catalog</a>
+          </div>
+        `;
+      }
+    }
+
+    function renderProductView(p, related) {
+      const inStock = p.stockQuantity > 0;
+      const isLowStock = inStock && p.stockQuantity <= (p.lowStockThreshold || 5);
+      const galleryImages = p.images && p.images.length > 0 ? p.images : [p.image];
+
+      let stockBadgeHTML = '';
+      if (!inStock) {
+        stockBadgeHTML = `<span class="stock-pill out-of-stock"><span class="stock-dot"></span>Out of Stock</span>`;
+      } else if (isLowStock) {
+        stockBadgeHTML = `<span class="stock-pill low-stock"><span class="stock-dot"></span>Only ${p.stockQuantity} Left!</span>`;
+      } else {
+        stockBadgeHTML = `<span class="stock-pill in-stock"><span class="stock-dot"></span>In Stock (${p.stockQuantity} Available)</span>`;
+      }
+
+      document.getElementById('productContainer').innerHTML = `
+        <!-- Breadcrumbs -->
+        <nav aria-label="breadcrumb" class="mb-4">
+          <ol class="breadcrumb text-muted small">
+            <li class="breadcrumb-item"><a href="index.html" class="text-secondary">Home</a></li>
+            <li class="breadcrumb-item"><a href="shop.html?category=${p.category}" class="text-secondary text-capitalize">${p.category}</a></li>
+            <li class="breadcrumb-item active text-light" aria-current="page">${p.name}</li>
+          </ol>
+        </nav>
+
+        <div class="row g-5">
+          <!-- Left: Image Gallery -->
+          <div class="col-lg-6">
+            <div class="position-relative mb-3">
+              <img src="${p.image}" alt="${p.name}" id="mainProductImg" class="gallery-main-img" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600'">
+              ${p.isSale ? '<span class="badge-sale position-absolute top-0 start-0 m-3 px-3 py-1 rounded-pill fw-bold">ON SALE</span>' : ''}
+            </div>
+
+            <!-- Thumbnail Reel -->
+            <div class="d-flex gap-3 overflow-auto pb-2">
+              ${galleryImages.map((img, i) => `
+                <img src="${img}" class="gallery-thumb ${i === 0 ? 'active' : ''}" onclick="switchGalleryImg('${img}', this)" alt="Thumbnail ${i}">
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Right: Product Information & Purchase -->
+          <div class="col-lg-6">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="product-category text-uppercase fw-bold">${p.category} | ${p.brand || 'FashionCart Signature'}</span>
+              ${stockBadgeHTML}
+            </div>
+
+            <h1 class="font-heading display-6 fw-bold text-white mb-2">${p.name}</h1>
+            <p class="text-muted small">SKU: <strong>${p.sku || `FC-${p.id}`}</strong></p>
+
+            <!-- Rating summary -->
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <div class="product-rating-stars">${FashionUI.renderStars(p.rating || 4.5)}</div>
+              <span class="text-warning fw-bold">${p.rating || 4.5}</span>
+              <span class="text-muted small">(${p.reviews || 0} reviews)</span>
+            </div>
+
+            <!-- Price Row -->
+            <div class="glass-card p-3 mb-4 d-flex align-items-baseline gap-3">
+              <span class="h2 fw-bold text-white mb-0" style="font-family: var(--font-display);">₹${p.price}</span>
+              ${p.originalPrice ? `<span class="h5 text-muted text-decoration-line-through mb-0">₹${p.originalPrice}</span>` : ''}
+              ${p.discount ? `<span class="badge-sale px-2 py-1 rounded-pill" style="font-size: 0.85rem;">Save ${p.discount}%</span>` : ''}
+            </div>
+
+            <p class="text-secondary mb-4 leading-relaxed">${p.description}</p>
+
+            <!-- Stock Progress Bar -->
+            <div class="glass-card p-3 mb-4">
+              <div class="d-flex justify-content-between mb-1 small fw-bold">
+                <span class="text-light"><i class="fas fa-boxes me-2 text-danger"></i>Inventory Status</span>
+                <span class="${inStock ? (isLowStock ? 'text-warning' : 'text-success') : 'text-danger'}">
+                  ${inStock ? `${p.stockQuantity} units available` : 'Sold out - restock pending'}
+                </span>
+              </div>
+              <div class="progress" style="height: 6px; background: rgba(255,255,255,0.08);">
+                <div class="progress-bar ${isLowStock ? 'bg-warning' : 'bg-success'}" style="width: ${Math.min(100, (p.stockQuantity / 35) * 100)}%"></div>
+              </div>
+            </div>
+
+            <!-- Size Selector -->
+            <div class="mb-4">
+              <div class="d-flex justify-content-between mb-2">
+                <label class="form-label text-light fw-bold small mb-0">Select Size</label>
+                <a href="#" class="text-danger small text-decoration-none" onclick="event.preventDefault(); FashionUI.showToast('Standard EU/US Fit: Size M corresponds to 38-40 inch chest.', 'info')">
+                  <i class="fas fa-ruler-horizontal me-1"></i>Size Guide
+                </a>
+              </div>
+              <div class="d-flex gap-2">
+                ${(p.sizes || ['S', 'M', 'L', 'XL']).map((s, i) => `
+                  <button class="btn btn-sm btn-outline-light rounded-pill px-3 py-2 ${i === 0 ? 'active' : ''}" onclick="selectSize('${s}', this)">${s}</button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Quantity & Actions -->
+            <div class="d-flex flex-wrap gap-3 align-items-center mb-4">
+              <div class="qty-stepper">
+                <button class="qty-btn" onclick="adjustQty(-1)" ${!inStock ? 'disabled' : ''}>-</button>
+                <span class="qty-display" id="qtyDisplay">1</span>
+                <button class="qty-btn" onclick="adjustQty(1)" ${!inStock ? 'disabled' : ''}>+</button>
+              </div>
+
+              <button class="btn-luxury flex-grow-1 ${!inStock ? 'disabled' : ''}" ${!inStock ? 'disabled' : ''} onclick="handleMainAddToCart()">
+                <i class="fas fa-shopping-bag"></i> Add to Bag
+              </button>
+
+              <button class="btn-glass" onclick="handleMainBuyNow()" ${!inStock ? 'disabled' : ''}>
+                <i class="fas fa-bolt text-warning"></i> Buy Now
+              </button>
+
+              <button class="nav-action-btn" title="Save to Wishlist" onclick="FashionUI.handleWishlistClick(${p.id}, this)">
+                <i class="${FashionAPI.store.isInWishlist(p.id) ? 'fas' : 'far'} fa-heart"></i>
+              </button>
+            </div>
+
+            <!-- Delivery Estimator -->
+            <div class="glass-card p-3 mb-4">
+              <label class="form-label text-light small fw-bold mb-2"><i class="fas fa-shipping-fast text-primary me-2"></i>Check Delivery Date</label>
+              <div class="input-group input-group-sm">
+                <input type="text" id="pincodeInput" class="form-control bg-dark text-light border-secondary" placeholder="Enter 6-digit Pincode">
+                <button class="btn btn-outline-danger" onclick="checkDelivery()">Verify</button>
+              </div>
+              <small class="text-success d-none mt-2" id="deliveryResult"><i class="fas fa-check-circle me-1"></i>Delivery available by <strong>Wednesday (Express)</strong></small>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TABS: Specs, Shipping, Reviews -->
+        <div class="mt-5 pt-4 border-top border-secondary border-opacity-25">
+          <ul class="nav nav-pills mb-4 gap-2" id="prodTab" role="tablist">
+            <li class="nav-item">
+              <button class="btn btn-glass active" id="specs-tab" data-bs-toggle="tab" data-bs-target="#specs" type="button">Specifications & Care</button>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-glass" id="shipping-tab" data-bs-toggle="tab" data-bs-target="#shipping" type="button">Shipping & Returns</button>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-glass" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviewsTabPane" type="button">Customer Reviews (<span id="reviewCountBadge">0</span>)</button>
+            </li>
+          </ul>
+
+          <div class="tab-content glass-card p-4">
+            <!-- Specs -->
+            <div class="tab-pane fade show active" id="specs">
+              <h5 class="font-heading fw-bold mb-3">Product Attributes</h5>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <table class="table table-dark table-borderless small mb-0">
+                    <tr><td class="text-muted">Material Composition</td><td class="text-light">100% Organic Egyptian Cotton / Pure Silk blend</td></tr>
+                    <tr><td class="text-muted">Country of Origin</td><td class="text-light">Crafted in India</td></tr>
+                    <tr><td class="text-muted">Wash Instructions</td><td class="text-light">Gentle machine wash cold or Dry Clean recommended</td></tr>
+                  </table>
+                </div>
+                <div class="col-md-6">
+                  <table class="table table-dark table-borderless small mb-0">
+                    <tr><td class="text-muted">Fit Type</td><td class="text-light">Tailored Contemporary Fit</td></tr>
+                    <tr><td class="text-muted">Authenticity Guarantee</td><td class="text-light">Verified Quality Checked Certificate Attached</td></tr>
+                    <tr><td class="text-muted">Style Code</td><td class="text-light">${p.sku || `FC-${p.id}`}</td></tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shipping -->
+            <div class="tab-pane fade" id="shipping">
+              <h5 class="font-heading fw-bold mb-3">Delivery & Hassle-Free Returns</h5>
+              <p class="text-secondary small leading-relaxed">
+                All orders are packaged in luxury biodegradable magnetic gift boxes and dispatched within 24 hours from our climate-controlled fulfillment hub. Free standard express shipping applies on all orders above ₹999.
+              </p>
+              <ul class="text-secondary small">
+                <li>Estimated Delivery: 2-4 business days across metro locations.</li>
+                <li>Easy 30-day return or exchange window from delivery date.</li>
+                <li>Doorstep pickup for hassle-free exchanges.</li>
+              </ul>
+            </div>
+
+            <!-- Reviews & Write a Review -->
+            <div class="tab-pane fade" id="reviewsTabPane">
+              <div class="row g-4">
+                <div class="col-lg-7" id="reviewsListContainer">
+                  <div class="text-center py-4"><div class="spinner-border text-danger" role="status"></div></div>
+                </div>
+
+                <div class="col-lg-5">
+                  <div class="glass-card p-4" style="background: rgba(0,0,0,0.3);">
+                    <h5 class="font-heading fw-bold text-white mb-2">Write a Review</h5>
+                    <p class="text-muted small mb-3">Share your styling experience with other shoppers.</p>
+
+                    <form id="submitReviewForm" onsubmit="handleReviewSubmit(event)">
+                      <div class="mb-3">
+                        <label class="form-label text-light small fw-bold mb-1">Your Rating</label>
+                        <div class="d-flex gap-2" id="starPicker">
+                          <i class="fas fa-star star-select active" data-score="1" onclick="setReviewRating(1)"></i>
+                          <i class="fas fa-star star-select active" data-score="2" onclick="setReviewRating(2)"></i>
+                          <i class="fas fa-star star-select active" data-score="3" onclick="setReviewRating(3)"></i>
+                          <i class="fas fa-star star-select active" data-score="4" onclick="setReviewRating(4)"></i>
+                          <i class="fas fa-star star-select active" data-score="5" onclick="setReviewRating(5)"></i>
+                        </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label text-light small fw-bold mb-1">Review Headline</label>
+                        <input type="text" id="reviewTitle" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="e.g. Exceptional fabric and fit!" required>
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label text-light small fw-bold mb-1">Detailed Review</label>
+                        <textarea id="reviewComment" rows="3" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Tell us about the drape, comfort, and compliments you received..." required></textarea>
+                      </div>
+
+                      <button type="submit" class="btn-luxury btn-sm w-100">
+                        <i class="fas fa-paper-plane me-2"></i>Publish Review
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Products Section -->
+        ${related.length > 0 ? `
+          <div class="mt-5 pt-5">
+            <h3 class="font-heading fw-bold mb-4">Complete the Look</h3>
+            <div class="row g-4">
+              ${related.map(r => `
+                <div class="col-6 col-md-3">
+                  ${FashionUI.createProductCardHTML(r)}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+      `;
+
+      FashionUI.initTilt3D();
+    }
+
+    function switchGalleryImg(src, el) {
+      document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('mainProductImg').src = src;
+    }
+
+    function selectSize(size, el) {
+      document.querySelectorAll('#productContainer .btn-outline-light').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      selectedSize = size;
+    }
+
+    function adjustQty(delta) {
+      const max = currentProduct?.stockQuantity || 1;
+      selectedQuantity = Math.max(1, Math.min(max, selectedQuantity + delta));
+      document.getElementById('qtyDisplay').textContent = selectedQuantity;
+    }
+
+    function handleMainAddToCart() {
+      if (!currentProduct) return;
+      const img = document.getElementById('mainProductImg');
+      FashionAPI.store.addToCart(currentProduct, selectedQuantity, selectedSize, selectedColor, img);
+    }
+
+    function handleMainBuyNow() {
+      if (!currentProduct) return;
+      FashionAPI.store.addToCart(currentProduct, selectedQuantity, selectedSize, selectedColor);
+      window.location.href = 'checkout.html';
+    }
+
+    function checkDelivery() {
+      const pin = document.getElementById('pincodeInput').value.trim();
+      if (pin.length >= 5) {
+        document.getElementById('deliveryResult').classList.remove('d-none');
+        FashionUI.showToast(`Express delivery available to PIN ${pin}!`, 'success');
+      } else {
+        FashionUI.showToast('Please enter a valid 6-digit postal code', 'error');
+      }
+    }
+
+    // Load and render product reviews from MongoDB
+    async function loadProductReviews(productId) {
+      const container = document.getElementById('reviewsListContainer');
+      try {
+        const res = await FashionAPI.reviews.getForProduct(productId);
+        document.getElementById('reviewCountBadge').textContent = res.totalReviews || 0;
+
+        if (res.reviews && res.reviews.length > 0) {
+          container.innerHTML = res.reviews.map(r => `
+            <div class="border-bottom border-secondary border-opacity-25 pb-3 mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="rounded-circle bg-danger bg-opacity-25 text-danger fw-bold d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                    ${r.userName ? r.userName.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <div>
+                    <span class="fw-bold text-light small d-block">${r.userName}</span>
+                    <span class="badge bg-success" style="font-size: 0.65rem;"><i class="fas fa-check-circle me-1"></i>Verified Buyer</span>
+                  </div>
+                </div>
+                <div class="product-rating-stars">${FashionUI.renderStars(r.rating)}</div>
+              </div>
+              <h6 class="fw-bold text-white mt-2 mb-1" style="font-size: 0.95rem;">${r.title}</h6>
+              <p class="text-secondary small mb-1">${r.comment}</p>
+              <small class="text-muted" style="font-size: 0.75rem;">${new Date(r.createdAt).toLocaleDateString()}</small>
+            </div>
+          `).join('');
+        } else {
+          container.innerHTML = `
+            <div class="text-center py-4">
+              <p class="text-muted">No customer reviews yet. Be the first to review this garment!</p>
+            </div>
+          `;
+        }
+      } catch (err) {
+        container.innerHTML = `<p class="text-muted small">Could not load reviews at this time.</p>`;
+      }
+    }
+
+    function setReviewRating(score) {
+      selectedRatingScore = score;
+      document.querySelectorAll('#starPicker i').forEach(star => {
+        const s = Number(star.getAttribute('data-score'));
+        if (s <= score) {
+          star.className = 'fas fa-star star-select active';
+        } else {
+          star.className = 'far fa-star star-select';
+        }
+      });
+    }
+
+    async function handleReviewSubmit(e) {
+      e.preventDefault();
+      if (!FashionAPI.auth.isLoggedIn()) {
+        FashionUI.showToast('Please sign in to publish a verified review.', 'info');
+        setTimeout(() => window.location.href = 'login.html', 1200);
+        return;
+      }
+
+      const title = document.getElementById('reviewTitle').value;
+      const comment = document.getElementById('reviewComment').value;
+
+      try {
+        await FashionAPI.reviews.submit(currentProduct.id, {
+          rating: selectedRatingScore,
+          title,
+          comment
+        });
+
+        FashionUI.showToast('Review submitted successfully!', 'success');
+        document.getElementById('submitReviewForm').reset();
+        loadProductReviews(currentProduct.id);
+      } catch (err) {
+        FashionUI.showToast(err.message, 'error');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadProductDetails);
+  </script>
+</body>
+
+</html>
